@@ -157,6 +157,16 @@ end
 
 
 % plot the SACs of a defined dataset in one figure and look for overlap
+session_nr = 10;  % first session
+folder_nr = 2;  % chickNM
+plot(BC_Joris_folder{folder_nr}{session_nr}, H_Joris_folder{folder_nr}{session_nr})
+hold on
+plot(SACtv_Ashida_folder{folder_nr}{session_nr}, SAC_Ashida_folder{folder_nr}{session_nr})
 
+% plotting cosmetics
+legend("Joris", "Ashida")
+ylabel("normalized coincidences")
+xlabel("delay [ms]")
+title(sprintf("SAC - data:%s, session:%d", folders(folder_nr), session_nr))
 
 
