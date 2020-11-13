@@ -22,9 +22,8 @@ idx1 = 1;
 while idx1 <= D
     % get struct from dir() for relevant .mat files in target folder 
     %path = "..\Raw_Data\" + foldername(idx1) + "\";
-    path = strcat('C:\Users\Dominik\Documents\Uni_Oldenburg\', ...
-                       '5th_semester\Project_Paper\3.Matlab\Raw_Data\', ...
-                       foldername(idx1), "\");
+    path = strcat('C:\Users\Dominik\Documents\Uni_Oldenburg\5th_semester', ...
+        '\MasterThesis\MatlabThesis\Raw_Data\', foldername(idx1), "\");
     cd(path)
     s = dir(path + '*.mat');    
     
@@ -44,7 +43,7 @@ end
 
 % change directory back to Code_Tests
 path = strcat('C:\Users\Dominik\Documents\Uni_Oldenburg\', ...
-              '5th_semester\Project_Paper\3.Matlab\Code_Tests\');
+              '5th_semester\MasterThesis\MatlabThesis\Code_Tests\');
 cd(path)
 
 end %[eof]

@@ -13,7 +13,7 @@ function [] = FunctionLoader(dir_path)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 path_CodeTest = strcat('C:\Users\Dominik\Documents\Uni_Oldenburg\', ...
-                       '5th_semester\Project_Paper\3.Matlab\Code_Tests');
+    '5th_semester\MasterThesis\MatlabThesis\Code_Tests');
 cd(path_CodeTest)
 
 % desired directory

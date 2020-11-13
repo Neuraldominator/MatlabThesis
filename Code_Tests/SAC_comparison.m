@@ -17,7 +17,7 @@ d = load("982.44.5.40.spikes.mat");
 % function.
 
 path = strcat("C:\Users\Dominik\Documents\Uni_Oldenburg\5th_semester\", ...
-              "\MasterThesis\3.Matlab\Code_Tests\");
+              "\MasterThesis\MatlabThesis\Code_Tests\");
 cd(path)
 
 % old code base, access: MetaAnalysis_VS_CI.m
@@ -131,8 +131,8 @@ for folder = 1:n_folders
         [H_Joris_session{session}, BC_Joris_session{session}, ...
             N_Joris_session{session}] = SPTCORR(SP, 'nodiag', TL, BW, ...
             durat, 'LouageNorm');
-        log_idx = BC_Joris{session} == 0;  % logical indexing
-        H = H_Joris{session};
+        log_idx = BC_Joris_session{session} == 0;  % logical indexing
+        H = H_Joris_session{session};
         CI_Joris_session{session} = H(log_idx); 
     end
     % folder results Ashida
