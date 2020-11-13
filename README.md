@@ -1,2 +1,3 @@
 # MatlabThesis
-mareike ist toll
+This is the repository for the analysis of spike data to compare the two
+metrics for spiking synchronization: Vector Strength and Correlation Index.
