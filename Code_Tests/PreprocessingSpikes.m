@@ -15,37 +15,54 @@ function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, cutoff)
 % Output: 
 %  data (struct): struct with fields based on animal and cell type with the 
 %                 cleansed spike trains. Order of cell entries: spikes, 
-%                 depvar, freq, epoch, durat, delay and cutoff.
+%                 depvar, freq, epoch, durat, delay, cutoff and "driven
+%                 spike rate". 
 %  Rout (struct): struct with fields representing the animal/ cell types.  
 %                 For each session (in cell) of a field, the driven spike 
 %                 rate is calculated from all non-spontaneous trials during
-%                 the time of stimulation. 
+%                 the time of stimulation [delay + cutoff, delay + duration]
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler, Nov 2020 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% default values
+% set default values
 if nargin < 2
   R_thresh = 30;
 end
 
+if nargin < 3
+    cutoff = 15;
+end
+
+% load the data from the specified folders in foldername
 spike_data = SpikeDataLoader(foldername);
 
-fields = fieldnames(spike_data);  % field names of spike_data struct
-n_folder = length(fields);  % number of folders
-data = spike_data;  % init
-Rout = struct();  % init
+% field names of spike_data struct
+fields = fieldnames(spike_data);  
+
+% number of folders
+n_folder = length(fields);  
+
+% init. output structs
+data = spike_data; 
+Rout = struct();  
+
 for folder = 1:n_folder
     % get all recordings from one animal and one cell type
     sp = getfield(data, fields{folder});  
     
-    % for each separate recording, access the spike trains
-    n_sessions = length(sp);  % number of sessions
-    session_cell = cell(1, 7);  %init.
-    session = 1;  % init. while loop
-    non_empty_session = 1; % init. counter
-    Rout_session = zeros(n_sessions, 1);  % init
+    % number of sessions
+    n_sessions = length(sp);
+    
+    % init. outputs for current folder
+    session_cell = cell(1, 8); 
+    Rout_session = zeros(n_sessions, 1); 
+    
+    % init. counters for while loop
+    session = 1; 
+    non_empty_session = 1;  % counter for the filtered sessions 
+    
     while session <= n_sessions
         % get the "session specifics"
         sp_session = sp{session}{1};      % spikes of the current session
@@ -78,16 +95,18 @@ for folder = 1:n_folder
             session_cell{non_empty_session, 5} = sp{session}{5};
             session_cell{non_empty_session, 6} = sp{session}{6};
             session_cell{non_empty_session, 7} = cutoff;
+            session_cell{non_empty_session, 8} = Rout_session(session);
             
-            % increase counter
+            % increase "filtered sessions" counter
             non_empty_session = non_empty_session + 1;
         end
         
+        % increase "session iteration" counter
         session = session + 1;
         
     end    
 
-    % update all sessions for current folder
+    % update all sessions for current folder in the current folder field
     data = setfield(data, fields{folder}, session_cell);
     Rout = setfield(Rout, fields{folder}, Rout_session);
 
