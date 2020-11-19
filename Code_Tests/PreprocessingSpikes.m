@@ -1,22 +1,24 @@
-function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, cutoff)
+function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, Nsp_thresh, cutoff)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Truncates the spike trains from those sessions of the raw spike data,
 % which have a higher driven spike rate than R_tresh. The truncation window
 % is given by [delay + cutoff, delay + durat].
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input: 
-%  foldername (str) : struct with fields based on animal and cell type with
-%                     the recorded spike trains. 
-%  R_thresh (double): spike rate threshold in [sp/sec], default is 30. All
-%                     sessions with a spike rate below R_thresh are removed
-%  cutoff (double)  : onset cutoff time [ms] after stimulation. Default is 
-%                     15.
+%  foldername (str)   : struct with fields based on animal and cell type with
+%                       the recorded spike trains. 
+%  R_thresh (double)  : spike rate threshold in [sp/sec], default is 30. All
+%                       sessions with a spike rate below R_thresh are removed
+%  Nsp_thresh (double): filtering threshold for the number of spikes, default 
+%                       is 400.
+%  cutoff (double)    : onset cutoff time [ms] after stimulation. Default is 
+%                       15.
 %
 % Output: 
 %  data (struct): struct with fields based on animal and cell type with the 
 %                 cleansed spike trains. Order of cell entries: spikes, 
-%                 depvar, freq, epoch, durat, delay, cutoff and "driven
-%                 spike rate". 
+%                 depvar, freq, epoch, durat, delay, cutoff, "driven
+%                 spike rate" and "total number of spikes".
 %  Rout (struct): struct with fields representing the animal/ cell types.  
 %                 For each session (in cell) of a field, the driven spike 
 %                 rate is calculated from all non-spontaneous trials during
@@ -28,10 +30,14 @@ function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, cutoff)
 
 % set default values
 if nargin < 2
-  R_thresh = 30;
+    R_thresh = 30;
 end
 
 if nargin < 3
+    Nsp_thresh = 400;
+end
+
+if nargin < 4
     cutoff = 15;
 end
 
@@ -58,6 +64,7 @@ for folder = 1:n_folder
     % init. outputs for current folder
     session_cell = cell(1, 8); 
     Rout_session = zeros(n_sessions, 1); 
+    Nsp_session = zeros(n_sessions, 1);
     
     % init. counters for while loop
     session = 1; 
@@ -82,11 +89,13 @@ for folder = 1:n_folder
                            'UniformOutput', false);  
         
         % total number of spikes for truncated spike trains 
-        [Rout_session(session), ~, ~] = GetSpikeRate(trunc_sp, T2-T1); 
+        [Rout_session(session), Nsp_session(session), ~] = ...
+            GetSpikeRate(trunc_sp, T2-T1); 
         
         
         % apply the filtering
-        if Rout_session(session) >= R_thresh  
+        if Rout_session(session) >= R_thresh && ...
+                Nsp_session(session) >= Nsp_thresh
             % storage
             session_cell{non_empty_session, 1} = trunc_sp;  
             session_cell{non_empty_session, 2} = dv_driven;
@@ -96,6 +105,7 @@ for folder = 1:n_folder
             session_cell{non_empty_session, 6} = sp{session}{6};
             session_cell{non_empty_session, 7} = cutoff;
             session_cell{non_empty_session, 8} = Rout_session(session);
+            session_cell{non_empty_session, 9} = Nsp_session(session);
             
             % increase "filtered sessions" counter
             non_empty_session = non_empty_session + 1;
