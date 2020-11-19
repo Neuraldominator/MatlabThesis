@@ -120,7 +120,7 @@ for folder = 1:n_folders
         T2 = delay + durat;  % ending time [ms] for the analysis  
         
         % maximum time difference [ms] for SAC calculation
-        TL = durat/5 * (1000/freq);  
+        TL = durat/5 * (1000/freq);  % Go used TL = 6 (see plotCIvivo.m)
         
         % Ashida's function
         [SAC_Ashida_session{session}, SACtv_Ashida_session{session}, ...
