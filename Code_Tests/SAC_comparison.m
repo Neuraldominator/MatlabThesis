@@ -50,8 +50,9 @@ a1 = SpikeDataLoader(folders);
 % set input parameters for preprocessing
 cutoff = 15;  % onset response cutoff [ms]
 R_thresh = 30;  % driven spike rate threshold [sp/sec]
+Nsp_thresh = 400;  % minimal number of spikes necessary
 
-[spike_data, Rout] = PreprocessingSpikes(folders, R_thresh, cutoff);
+[spike_data, Rout] = PreprocessingSpikes(folders, R_thresh, Nsp_thresh, cutoff);
 % spikes from session s, trial t: spike_data.chickNL{s, 1}{t}
 % depvar from session s, trial t: spike_data.chickNL{s, 2}{t}
 % freq from session s: spike_data.chickNL{s, 3}
@@ -91,7 +92,7 @@ for folder = 1:n_folders
     data_folder = getfield(spike_data, folders{folder});
     
     % number of sessions
-    n_sessions = length(data_folder);  
+    n_sessions = size(data_folder, 1);  
     
     % init - Ashida
     SAC_Ashida_session = cell(n_sessions, 1);   % SAC values
