@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This script calculates VS and CI for the artifical spike trains generated
-% in "generateData.m". Finally, the VS-CI curve is constructed.
+% in the script "generateData.m", saved in the folder "Raw_GenData". The 
+% VS-CI curve is constructed for this data.
 
 %% 1. Load the generated data
 load("Raw_GenData\gen_data.mat");
