@@ -7,7 +7,7 @@ Please note that some directory paths are still unique to my local repositories.
 
 Folders:
 
-+ _Analysis_Scripts:_ contains all .m scripts used to conduct specifiy analyses with (e.g. VS-CI plot for invivo and generated data, or code for comparing Joris' SPTCORR.m function with Go's calcSAC.m function.
++ _Analysis_Scripts:_ contains all .m scripts used to conduct specific analyses with (e.g. VS-CI plot for invivo and generated data, or code for comparing Joris' SPTCORR.m function with Go's calcSAC.m function.
 
 
 
