@@ -14,6 +14,8 @@ generated data, or code for comparing Joris' SPTCORR.m function with Go's calcSA
 
 
 
+
+
 ++++ Raw_Data ++++
 
 contains invivo data from chicken NM (nucleus magnocellularis), chicken NL (nucleus laminaris),
@@ -21,10 +23,14 @@ alligators NL, alligator NM, owls NM
 
 
 
+
+
 ++++ Gen_Data ++++
 
 contains script which enables to generate data according to your liking. The folder "Raw_GenData"
 contains the data from one generation run of "generateData.m"
+
+
 
 
 
@@ -36,7 +42,10 @@ the legacy code by Joris et al (2006), the Bruce-Zilany model (2018) and two rep
 
 
 
+
+
 ++++ Utils ++++
+
 contains helper functions that are too general or widely used to be included in another module 
 and too small to claim their own module.
 
