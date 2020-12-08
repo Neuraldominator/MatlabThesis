@@ -1,16 +1,20 @@
-%% Re-Analyze the invivo data 
-% Based on the script SAC_comparison.m of this folder, we know that the 
-% analysis code of Ashida and Joris produce the same results. For this
-% analysis, we use Ashida's code and reproduce the VS-CI curve.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Re-Analyze the invivo data in the folder "Raw_Data". Based on the script
+% "SAC_comparison.m" of the current folder, we know that the analysis code
+% of Ashida and Joris produce the same results. For this analysis, we use 
+% Ashida's code and reproduce the VS-CI plot for the invivo data.
 
 %% 1. Load the repo by Ashida
-% set working directory
+% set current working directory
 path = strcat("C:\Users\Dominik\Documents\Uni_Oldenburg\5th_semester\", ...
-              "\MasterThesis\MatlabThesis\Code_Tests\");
+              "\MasterThesis\MatlabThesis\Analysis_Scripts\");
 cd(path)
 
 % access the repo from Ashida
-FunctionLoader("..\Source_Code\Ashida_2020_code\invivo")
+addpath("..\Source_Code\Ashida_2020_code\invivo")
+
+% access the helper functions from the "Utils" folder 
+addpath("..\Utils")
 
 %% 2. Load the preprocessed data from all animals and all cell types
 % specify the folder names containing the raw data (here: all)

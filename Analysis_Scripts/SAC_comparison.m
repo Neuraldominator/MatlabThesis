@@ -1,3 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This script compares the code for computing the SAC written by Ashida 
+% (2020) with the one written by Joris (2006). For this, we load both 
+% directories in here and run their functions with invivo data from the 
+% folder "Raw_Data". We compare Ashida's "calcSAC.m" with Joris' 
+% "SPTCORR.m" function.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
 %% I. Overview of Data Structure
 %  delay --- starting time of sound stimulus 
 %  durat --- duration of sound stimulus
@@ -7,25 +15,20 @@
 %  spikes -- recorded spike times [ms] 
 %  threshold, abi --- (please just ignore them) 
 
-d = load("982.44.5.40.spikes.mat");
+% data example
+d = load("..\Raw_Data\owlNM\982.44.5.40.spikes.mat");
 
 %% 1. Load the analysis files from Ashida2020 and Joris2006
-% We want to compare the code computing the SAC written by Ashida (2020) 
-% with the one written by Joris (2006). For this, we load both directories
-% in here and run their functions with invivo data from the folder
-% "Raw_Data". We compare Ashida's "calcSAC.m" with Joris' "SPTCORR.m" 
-% function.
-
 path = strcat("C:\Users\Dominik\Documents\Uni_Oldenburg\5th_semester\", ...
-              "\MasterThesis\MatlabThesis\Code_Tests\");
+              "\MasterThesis\MatlabThesis\Analysis_Scripts\");
 cd(path)
 
-% old code base, access: MetaAnalysis_VS_CI.m
-%addpath("C:\Users\Dominik\Documents\Uni_Oldenburg\2nd_semester\2_Research_Module(15ECTS)\Dominik_VSanalysis\data")
-
 % access the repos from Ashida and Joris
-FunctionLoader("..\Source_Code\Ashida_2020_code\invivo")
-FunctionLoader("..\Source_Code\Joris_2006_code")
+addpath("..\Source_Code\Ashida_2020_code\invivo")
+addpath("..\Source_Code\Joris_2006_code")
+
+% access the helper functions in the folder "Utils"
+addpath("..\Utils")
 
 % load data
 folders = ["chickNL", "chickNM", "gatorNL", "gatorNM", "owlNM"];

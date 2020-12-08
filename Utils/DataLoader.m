@@ -1,7 +1,7 @@
 function raw_data = DataLoader(foldername)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % loading invivo data from specified folders. Assumes a project folder 
-% strucutre as in "3.Matlab".
+% strucutre as in "MatlabThesis". 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input: 
 %  datafolder (str): folder name of the raw data, e.g. "chickNL". Can be a
@@ -43,7 +43,7 @@ end
 
 % change directory back to Code_Tests
 path = strcat('C:\Users\Dominik\Documents\Uni_Oldenburg\', ...
-              '5th_semester\MasterThesis\MatlabThesis\Code_Tests\');
+              '5th_semester\MasterThesis\MatlabThesis\Analysis_Scripts\');
 cd(path)
 
 end %[eof]

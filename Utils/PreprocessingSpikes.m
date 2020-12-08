@@ -5,14 +5,15 @@ function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, Nsp_thresh, cu
 % is given by [delay + cutoff, delay + durat].
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input: 
-%  foldername (str)   : struct with fields based on animal and cell type with
-%                       the recorded spike trains. 
-%  R_thresh (double)  : spike rate threshold in [sp/sec], default is 30. All
-%                       sessions with a spike rate below R_thresh are removed
-%  Nsp_thresh (double): filtering threshold for the number of spikes, default 
-%                       is 400.
-%  cutoff (double)    : onset cutoff time [ms] after stimulation. Default is 
-%                       15.
+%  foldername (str)   : struct with fields based on animal and cell type 
+%                       with the recorded spike trains. 
+%  R_thresh (double)  : spike rate threshold in [sp/sec], default is 30. 
+%                       All sessions with a spike rate below R_thresh are
+%                       removed.
+%  Nsp_thresh (double): filtering threshold for the number of spikes, 
+%                       default is 400.
+%  cutoff (double)    : onset cutoff time [ms] after stimulation. Default
+%                       is 15.
 %
 % Output: 
 %  data (struct): struct with fields based on animal and cell type with the 
@@ -62,7 +63,7 @@ for folder = 1:n_folder
     n_sessions = length(sp);
     
     % init. outputs for current folder
-    session_cell = cell(1, 8); 
+    session_cell = cell(1, 9); 
     Rout_session = zeros(n_sessions, 1); 
     Nsp_session = zeros(n_sessions, 1);
     
