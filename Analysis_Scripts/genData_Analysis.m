@@ -1,13 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This script calculates VS and CI for the artifical spike trains generated
-% in the script "generateData.m", saved in the folder "Raw_GenData". The 
-% VS-CI curve is constructed for this data.
+% in the script "generateData.m", saved in the folder 
+% "..\Gen_Data\Raw_GenData". The VS-CI curve is constructed for this data.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 1. Load the generated data
-load("Raw_GenData\gen_data.mat");
+load("..\Gen_Data\Raw_GenData\gen_data.mat");
 
+pwd
 %% 2. Add path of source code for VS and CI computation
-addpath("../Source_Code/Ashida_2020_code/invivo");
+addpath("..\Source_Code\Ashida_2020_code\invivo");
 % help calcPhaseHist
 % help calcSAC
 
@@ -55,16 +57,17 @@ xlim([0, 10])
 %% compare VSin with empirical VS values 
 
 for k=1:N
-    VSin(k)=gen_data.dec6_2020{k, 10};
+    VSin(k) = gen_data.dec6_2020{k, 10};
 end
 
+% mean squared error
 diff = VS - VSin';
-sqe = sum(diff.^2);
+mse = mean(diff.^2);
 
 % summary plot
 figure
 plot(VSin, VS, 'o')
-title("Compare input VS with output VS")
+title(sprintf("Compare input VS with output VS, mse=%.e", mse))
 ylabel("VSout")
 xlabel("VSin")
 xlim([0 1])
