@@ -41,7 +41,7 @@ plot(CI, VS, '+k')
 hold on
 
 % reference lines
-% plot
+% plot()
 hold off
 
 % plot cosmetics
@@ -63,7 +63,7 @@ sqe = sum(diff.^2);
 % summary plot
 figure
 plot(VSin, VS, 'o')
-title("Compare VS (input vs. output)")
+title("Compare input VS with output VS")
 ylabel("VSout")
 xlabel("VSin")
 xlim([0 1])
