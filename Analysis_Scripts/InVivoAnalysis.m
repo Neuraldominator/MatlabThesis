@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Re-Analyze the invivo data in the folder "Raw_Data". Based on the script
+% Re-analyze the invivo data in the folder "Raw_Data". Based on the script
 % "SAC_comparison.m" of the current folder, we know that the analysis code
 % of Ashida and Joris produce the same results. For this analysis, we use 
 % Ashida's code and reproduce the VS-CI plot for the invivo data.
