@@ -93,7 +93,6 @@ for folder = 1:n_folder
         [Rout_session(session), Nsp_session(session), ~] = ...
             GetSpikeRate(trunc_sp, T2-T1); 
         
-        
         % apply the filtering
         if Rout_session(session) >= R_thresh && ...
                 Nsp_session(session) >= Nsp_thresh
@@ -171,7 +170,7 @@ end  %[oef]
 %--------------------------------------------------------------------------
 function [R, Nsp, N] = GetSpikeRate(SPin, durat)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Truncate the spike train to the analysis window [T1, T2].
+% Calculates the spike rate for a Dx1 cell array containing D spike trains.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input: 
 %  SPin (cell)   : cell array containing spike trains [ms].
