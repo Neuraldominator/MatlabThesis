@@ -51,8 +51,8 @@ VS_error = (VSemp - VStheo) ./ VStheo;
 CI_error = (CIemp - CItheo) ./ CItheo;
 
 %% Plot results
-bin_width = 5;  % 2.5
-edges = -205:bin_width:205;  % -21.25:bin_width:21.75
+bin_width = 1;  % 5, 2.5
+edges = -20:bin_width:20;  % -20,5:205, -21.25:21.75
 
 figure
 % VS, AN
@@ -82,4 +82,50 @@ histogram(100*CI_error(end-58:end), edges)
 title("CI Error (GBC): (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
 ylabel("counts")
+
+
+%% Remove the outliers and re-do the plot
+
+% Identify the indices of the low stimulation data (<= 400Hz)
+% GBC70: index 12, 23, 24 corresponds to 200Hz, 300Hz, 400Hz 
+% GBC40: index 12, 23, 24 corresponds to 200Hz, 300Hz, 400Hz
+% AN70: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
+% AN40: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
+
+% Remove the respective rows from the error vectors above
+VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
+CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
+
+% Re-plot the histograms without the outliers
+bin_width = 1;
+edges = -20:bin_width:20; 
+
+figure
+subplot(2,2,1)
+histogram(100*VS_error(1:52), edges)
+title("VS Error (AN): (VSemp-VStheo)/VStheo")
+xlabel("rel. error [%]")
+ylabel("counts")
+
+subplot(2,2,2)
+histogram(100*CI_error(1:52), edges)
+title("CI Error (AN): (CIemp-CItheo)/CItheo")
+xlabel("rel. error [%]")
+ylabel("counts")
+
+subplot(2,2,3)
+histogram(100*VS_error(end-52:end), edges)
+title("VS Error (GBC): (VSemp-VStheo)/VStheo")
+xlabel("rel. error [%]")
+ylabel("counts")
+
+subplot(2,2,4)
+histogram(100*CI_error(end-52:end), edges)
+title("CI Error (GBC): (CIemp-CItheo)/CItheo")
+xlabel("rel. error [%]")
+ylabel("counts")
+
+
+
+
 
