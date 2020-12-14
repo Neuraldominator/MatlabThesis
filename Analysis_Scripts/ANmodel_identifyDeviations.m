@@ -29,9 +29,9 @@ data2 = PreprocessingSpikes_genData(path2, db, celltype, sf, cutoff);
 data_cell = vertcat(data0.ANdata70db, data1.ANdata70db, data2.ANdata70db);
 
 % Explore: The VS-CI values of the (AN,70db) dataset 
-VSCI_AN70(2,:);  % 200 Hz
-VSCI_AN70(3,:);  % 300 Hz
-VSCI_AN70(4,:);  % 400 Hz
+VSCI_AN70(2,:);  % f1 = 200 Hz (see couple of lines below)
+VSCI_AN70(3,:);  % f2 =300 Hz (see couple of lines below)
+VSCI_AN70(4,:);  % f3 =400 Hz (see couple of lines below)
 
 % find out the corresponding stimulation frequencies
 [f1,f2,f3]=data_cell{2:4,3};
@@ -52,4 +52,3 @@ data = PreprocessingSpikes_genData(path, db, celltype, sf, cutoff);
 VSCI_GBC40(12,:)  % corresponds to the "green star outlier" in the plot
 f = data.GBCdata40db{12,3};  % find out the corresponding stimulation 
                              % frequency
-
