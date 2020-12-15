@@ -52,7 +52,7 @@ CI_error = (CIemp - CItheo) ./ CItheo;
 
 %% Plot results
 bin_width = 1;  % 5, 2.5
-edges = -20:bin_width:20;  % -20,5:205, -21.25:21.75
+edges = -205:bin_width:205;  % -20,5:205, -21.25:21.75
 
 figure
 % VS, AN
@@ -92,40 +92,56 @@ ylabel("counts")
 % AN70: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
 % AN40: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
 
+% Extract the above cases from the error vectors
+VS_outlier = VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
+CI_outlier = CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
+
 % Remove the respective rows from the error vectors above
 VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
 CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
 
-% Re-plot the histograms without the outliers
+%% Re-plot the histograms without the outliers
 bin_width = 1;
-edges = -20:bin_width:20; 
+edges = -205:bin_width:205; 
 
 figure
+%VS,AN
 subplot(2,2,1)
 histogram(100*VS_error(1:52), edges)
-title("VS Error (AN): (VSemp-VStheo)/VStheo")
+hold on
+histogram(100*VS_outlier(1:6), edges)
+hold off
+title("VS Error Distribution (AN): (VSemp-VStheo)/VStheo")
 xlabel("rel. error [%]")
 ylabel("counts")
+legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,2)
 histogram(100*CI_error(1:52), edges)
-title("CI Error (AN): (CIemp-CItheo)/CItheo")
+hold on
+histogram(100*CI_outlier(1:6), edges)
+hold off
+title("CI Error Distribution (AN): (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
 ylabel("counts")
+legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,3)
 histogram(100*VS_error(end-52:end), edges)
-title("VS Error (GBC): (VSemp-VStheo)/VStheo")
+hold on
+histogram(100*VS_outlier(7:end), edges)
+hold off
+title("VS Error Distribution (GBC): (VSemp-VStheo)/VStheo")
 xlabel("rel. error [%]")
 ylabel("counts")
+legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,4)
 histogram(100*CI_error(end-52:end), edges)
-title("CI Error (GBC): (CIemp-CItheo)/CItheo")
+hold on
+histogram(100*CI_outlier(7:end), edges)
+hold off
+title("CI Error Distribution (GBC): (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
 ylabel("counts")
-
-
-
-
-
+legend("500-3000Hz","200-400Hz","Location","northeast")
