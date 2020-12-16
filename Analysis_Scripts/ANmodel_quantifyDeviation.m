@@ -97,19 +97,21 @@ VS_outlier = VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
 CI_outlier = CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
 
 % Remove the respective rows from the error vectors above
-VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
-CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
+%VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
+%CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
 
 %% Re-plot the histograms without the outliers
 bin_width = 1;
-edges = -205:bin_width:205; 
+edges = -20:bin_width:20;  % -205:bin_width:205;
 
 figure
 %VS,AN
 subplot(2,2,1)
-histogram(100*VS_error(1:52), edges)
+histogram(100*VS_error(1:58), edges)  % with outliers
+% histogram(100*VS_error(1:52), edges)  % without outliers
 hold on
 histogram(100*VS_outlier(1:6), edges)
+alpha(1)
 hold off
 title("VS Error Distribution (AN): (VSemp-VStheo)/VStheo")
 xlabel("rel. error [%]")
@@ -117,9 +119,11 @@ ylabel("counts")
 legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,2)
-histogram(100*CI_error(1:52), edges)
+histogram(100*CI_error(1:58), edges)  % with outliers
+% histogram(100*CI_error(1:52), edges)  % without outliers
 hold on
 histogram(100*CI_outlier(1:6), edges)
+alpha(1)
 hold off
 title("CI Error Distribution (AN): (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
@@ -127,9 +131,11 @@ ylabel("counts")
 legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,3)
-histogram(100*VS_error(end-52:end), edges)
+histogram(100*VS_error(59:end), edges)  % with outliers
+% histogram(100*VS_error(end-52:end), edges)  % without outliers
 hold on
 histogram(100*VS_outlier(7:end), edges)
+alpha(1)
 hold off
 title("VS Error Distribution (GBC): (VSemp-VStheo)/VStheo")
 xlabel("rel. error [%]")
@@ -137,9 +143,11 @@ ylabel("counts")
 legend("500-3000Hz","200-400Hz","Location","northeast")
 
 subplot(2,2,4)
-histogram(100*CI_error(end-52:end), edges)
+histogram(100*CI_error(59:end), edges)  % with outliers
+% histogram(100*CI_error(end-52:end), edges)  % without outliers
 hold on
 histogram(100*CI_outlier(7:end), edges)
+alpha(1)
 hold off
 title("CI Error Distribution (GBC): (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
