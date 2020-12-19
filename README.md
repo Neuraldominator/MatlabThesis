@@ -24,7 +24,9 @@ Folders:
 
 
 + _Utils:_ contains helper functions that are too general or widely used to be included in another module 
-  and too small to claim their own module.
+  and too small to claim their own module. They are clustered roughly in 3 different categories. The helper
+  functions to analyze the invivo data, the AN/GBC data and the ANmod data. For each of these categories 
+  there is at least a DataLoader function and a Preprocessing function.
 
 
 
