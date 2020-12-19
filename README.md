@@ -19,7 +19,8 @@ Folders:
 
 
 
-+ _Source_Code:_ this folder contains several subfolders with the code base from several different sources, e.g. the legacy code by Joris et al (2006), the Bruce-Zilany model (2018) and two repos by Go Ashida ("ANmodel" and "Ashida_code_2020").
++ _Source_Code:_ this folder contains several subfolders with the code base from several different sources, e.g. the legacy code by Joris et al (2006), the Bruce-Zilany model
+  (2018) and two repos by Go Ashida, namely "Ashida_code_2020" and "ANmodel". The latter mainly contains generated data using the Bruce-Zilany (2018) model.
 
 
 
