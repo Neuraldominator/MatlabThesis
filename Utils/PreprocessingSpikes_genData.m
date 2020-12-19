@@ -49,7 +49,7 @@ for k1 = 1:Ndata
     % retrieve the stimulation start etc from the time vector 
     Nsteps = size(con{k1, 4}, 2);  % number of simulated time steps
     epoch = Nsteps * dt;  % total simulation length [ms]
-    delay = find(con{1,4}==0)*0.01;  % start of stimulus [ms]
+    delay = find(con{k1,4}==0)*0.01;  % start of stimulus [ms]
     
     % set the start T1 and end T2 of the analysis window
     T1 = delay + cutoff;
