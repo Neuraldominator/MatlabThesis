@@ -40,11 +40,14 @@ end
 
 %% 4. Plot VS against CI
 figure
-plot(CI, VS, '+k')
+plot(CI, VS, '+b')
 hold on
 
 % reference lines
-% plot()
+kappa = 0:0.1:45;
+VStheo = besseli(1,kappa) ./ besseli(0,kappa);
+CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
+plot(CItheo, VStheo, '-k')
 hold off
 
 % plot cosmetics
@@ -52,7 +55,8 @@ title("Relation between VS and CI based on generated data")
 xlabel("CI")
 ylabel("VS")
 ylim([0, 1])
-xlim([0, 10])
+xlim([0, 11])
+legend("generated data", "theoretical line", "Location", "southeast")
 
 %% compare VSin with empirical VS values 
 
