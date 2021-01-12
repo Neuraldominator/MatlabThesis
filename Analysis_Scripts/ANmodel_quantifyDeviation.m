@@ -6,7 +6,7 @@
 % (B) "the difference of the theo and sim CI values for the same VS 
 %     (= deviation along the x-axis)" 
 % This script loads the data saved under VSCI_ANmodel.mat, which was saved
-% in the script "analysis_AN_GBC.m".
+% in the script "ANmodel_restructureData.m".
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 load("VSCI_ANmodel.mat");
