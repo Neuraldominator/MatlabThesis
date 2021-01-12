@@ -92,15 +92,22 @@ cols = {[0,0.6,0], [0,0.4,0.2], [0.8,0,0], [1,0.6,0], [0,0,0.8]};
 symb = ['d', '+', 's', 'x', 'o'];
 leg = string();  % init.
 
+% define the theoretical relation line
+kappa = 0:0.1:45;
+VStheo = besseli(1,kappa) ./ besseli(0,kappa);
+CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
+
 figure
 for f = 1:n_folders
-    leg(f) = folders(f) + " (N=" + string(numel(CI_folder{f})) + ")";
-    plot(CI_folder{f},VS_folder{f},symb(f),'color',cols{f})
-    hold on
+   leg(f) = folders(f) + " (N=" + string(numel(CI_folder{f})) + ")";
+   plot(CI_folder{f},VS_folder{f},symb(f),'color',cols{f})
+   hold on
 end
+plot(CItheo, VStheo, '-k')  % reference line
 xlabel("CI")
 xlim([min(cellfun(@min,CI_folder))-1, max(cellfun(@max, CI_folder))+1])
 ylim([0, 1])
+xlim([0, 11])
 ylabel("VS")
 title("VS-CI Comparison")
 legend(leg, 'Location', 'best')
