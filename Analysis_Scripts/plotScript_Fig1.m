@@ -168,10 +168,31 @@ xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
 
 %% SAC curve - good example
+BW = 0.05;  % coincidence window in [ms]
+TL = 6;  % max histogram bin
+[SAC_good, SACtv_good, CI_good, ~, ~] = calcSAC(spt_trunc_good, BW, ...
+    T1_good, T2_good, TL);
+
+% plot
+figure
+plot(SACtv_good, SAC_good, '-k')
+title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, VS_good, CI_good))
+xlabel("delay (ms)")
+ylabel("norm. coincidences")
 
 
 %% SAC curve - bad example
+BW = 0.05;  % coincidence window in [ms]
+TL = 6;  % max histogram bin
+[SAC_bad, SACtv_bad, CI_bad, ~, ~] = calcSAC(spt_trunc_bad, BW, ...
+    T1_bad, T2_bad, TL);
 
+% plot
+figure
+plot(SACtv_bad, SAC_bad, '-k')
+title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, VS_bad, CI_bad))
+xlabel("delay (ms)")
+ylabel("norm. coincidences")
 
 
 
