@@ -2,7 +2,9 @@ function [data, Rout] = PreprocessingSpikes(foldername, R_thresh, Nsp_thresh, cu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Truncates the spike trains from those sessions of the raw spike data,
 % which have a higher driven spike rate than R_tresh. The truncation window
-% is given by [delay + cutoff, delay + durat].
+% is given by [delay + cutoff, delay + durat]. Before, the functions
+% removes potential spike doublets from the spike trains. Only the last 
+% spike of all spikes recorded within a 0.5ms time window is kept.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input: 
 %  foldername (str)   : struct with fields based on animal and cell type 
