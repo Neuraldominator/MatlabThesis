@@ -48,7 +48,7 @@ spike_data = SpikeDataLoader(foldername);
 % field names of spike_data struct
 fields = fieldnames(spike_data);  
 
-% number of folders
+% number of data folders
 n_folder = length(fields);  
 
 % init. output structs
@@ -56,69 +56,81 @@ data = spike_data;
 Rout = struct();  
 
 for folder = 1:n_folder
-    % get all recordings from one animal and one cell type
-    sp = getfield(data, fields{folder});  
+   % get all recordings from one animal and one cell type
+   sp = getfield(data, fields{folder});  
     
-    % number of sessions
-    n_sessions = length(sp);
+   % number of sessions
+   n_sessions = length(sp);
     
-    % init. outputs for current folder
-    session_cell = cell(1, 9); 
-    Rout_session = zeros(n_sessions, 1); 
-    Nsp_session = zeros(n_sessions, 1);
-    
-    % init. counters for while loop
-    session = 1; 
-    non_empty_session = 1;  % counter for the filtered sessions 
-    
-    while session <= n_sessions
-        % get the "session specifics"
-        sp_session = sp{session}{1};      % spikes of the current session
-        depvar_session = sp{session}{2};  % depvar of the current session
-        durat = sp{session}{5};           % duration of the current session
-        delay = sp{session}{6};           % delay of the current session
+   % init. outputs for current folder
+   session_cell = cell(1, 9); 
+   Rout_session = zeros(n_sessions, 1); 
+   Nsp_session = zeros(n_sessions, 1);
+   
+   % init. counters for while loop
+   session = 1; 
+   non_empty_session = 1;  % counter for the filtered sessions 
+   
+   while session <= n_sessions
+      % get the "session specifics"
+      sp_session0 = sp{session}{1};     % spikes of the current session
+      depvar_session = sp{session}{2};  % depvar of the current session
+      durat = sp{session}{5};           % duration of the current session
+      delay = sp{session}{6};           % delay of the current session
+      
+      % remove potential spike doublets
+      Nrep = numel(sp_session0);  % number of repetitions
+      trefract = 0.5;   % refractory window for rejecting double spikes
+      sp_session = cell(Nrep, 1);  % init
+      for n = 1:Nrep
+         Nsp = length(sp_session0{n});     
+         sptrev = fliplr(sp_session0{n});  
+         sptdummy = [max(sptrev) + trefract, sptrev(1:Nsp-1)] ;
+         sptrev = sptrev((sptdummy - sptrev) >= trefract); 
+         sp_session{n} = fliplr(sptrev);
+      end
+       
+      % get all non-spontaneous trials and update the depvar vector
+      sp_driven = sp_session(~isTrialSpontaneous(depvar_session));
+      dv_driven = depvar_session(~isTrialSpontaneous(depvar_session));
+      
+      % truncate the non-spontaneous trials
+      T1 = delay + cutoff;  % cut off the onset response 
+      T2 = delay + durat;  % end of stimulation time
+      SpikeTrainTruncWrapper = @(SPin) SpikeTrainTruncator(SPin, T1, T2);
+      trunc_sp = cellfun(SpikeTrainTruncWrapper, sp_driven, ...
+                         'UniformOutput', false);  
+       
+      % total number of spikes for truncated spike trains 
+      [Rout_session(session), Nsp_session(session), ~] = ...
+          GetSpikeRate(trunc_sp, T2-T1); 
+       
+      % apply the filtering
+      if Rout_session(session) >= R_thresh && ...
+              Nsp_session(session) >= Nsp_thresh
+         % storage
+         session_cell{non_empty_session, 1} = trunc_sp;  
+         session_cell{non_empty_session, 2} = dv_driven;
+         session_cell{non_empty_session, 3} = sp{session}{3}; 
+         session_cell{non_empty_session, 4} = sp{session}{4}; 
+         session_cell{non_empty_session, 5} = sp{session}{5};
+         session_cell{non_empty_session, 6} = sp{session}{6};
+         session_cell{non_empty_session, 7} = cutoff;
+         session_cell{non_empty_session, 8} = Rout_session(session);
+         session_cell{non_empty_session, 9} = Nsp_session(session);
+          
+         % increase "filtered sessions" counter
+         non_empty_session = non_empty_session + 1;
+     end
         
-        % get all non-spontaneous trials and update the depvar vector
-        sp_driven = sp_session(~isTrialSpontaneous(depvar_session));
-        dv_driven = depvar_session(~isTrialSpontaneous(depvar_session));
-        
-        % truncate the non-spontaneous trials
-        T1 = delay + cutoff;  % cut off the onset response 
-        T2 = delay + durat;  % end of stimulation time
-        SpikeTrainTruncWrapper = @(SPin) SpikeTrainTruncator(SPin, T1, T2);
-        trunc_sp = cellfun(SpikeTrainTruncWrapper, sp_driven, ...
-                           'UniformOutput', false);  
-        
-        % total number of spikes for truncated spike trains 
-        [Rout_session(session), Nsp_session(session), ~] = ...
-            GetSpikeRate(trunc_sp, T2-T1); 
-        
-        % apply the filtering
-        if Rout_session(session) >= R_thresh && ...
-                Nsp_session(session) >= Nsp_thresh
-            % storage
-            session_cell{non_empty_session, 1} = trunc_sp;  
-            session_cell{non_empty_session, 2} = dv_driven;
-            session_cell{non_empty_session, 3} = sp{session}{3}; 
-            session_cell{non_empty_session, 4} = sp{session}{4}; 
-            session_cell{non_empty_session, 5} = sp{session}{5};
-            session_cell{non_empty_session, 6} = sp{session}{6};
-            session_cell{non_empty_session, 7} = cutoff;
-            session_cell{non_empty_session, 8} = Rout_session(session);
-            session_cell{non_empty_session, 9} = Nsp_session(session);
-            
-            % increase "filtered sessions" counter
-            non_empty_session = non_empty_session + 1;
-        end
-        
-        % increase "session iteration" counter
-        session = session + 1;
-        
-    end    
+     % increase "session iteration" counter
+     session = session + 1;
+      
+   end    
 
-    % update all sessions for current folder in the current folder field
-    data = setfield(data, fields{folder}, session_cell);
-    Rout = setfield(Rout, fields{folder}, Rout_session);
+   % update all sessions for current folder in the current folder field
+   data = setfield(data, fields{folder}, session_cell);
+   Rout = setfield(Rout, fields{folder}, Rout_session);
 
 end
 
