@@ -5,151 +5,109 @@
 %     (= deviation along the y-axis)" and 
 % (B) "the difference of the theo and sim CI values for the same VS 
 %     (= deviation along the x-axis)" 
-% This script loads the data saved under VSCI_ANmodel.mat, which was saved
-% in the script "analysis_AN_GBC.m".
+% This script loads the data saved in VSCI_ANmodel_AM.mat, which was saved
+% in the script "ANmodel_AM_restructure.m".
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% load VS and CI values from ANmod data (contains the struct variable VSCI)
+load("VSCI_ANmodel_AM.mat");
 
-load("VSCI_ANmodel.mat");
-% contains the variables: VSCI_AN40, VSCI_AN70, VSCI_GBC40, VSCI_GBC70
-
+% convert struct to cell array and to matrix
+VSCIcell = struct2cell(VSCI);
+VSCImat = cell2mat(VSCIcell);
+ 
 % VS values
-VS_AN40 = VSCI_AN40(:,1);
-VS_AN70 = VSCI_AN70(:,1);
-VS_GBC40 = VSCI_GBC40(:,1);
-VS_GBC70 = VSCI_GBC70(:,1);
-VSemp = vertcat(VS_AN40, VS_AN70, VS_GBC40, VS_GBC70);
+VSemp = VSCImat(:,1);
 
 % CI values
-CI_AN40 = VSCI_AN40(:,2);
-CI_AN70 = VSCI_AN70(:,2);
-CI_GBC40 = VSCI_GBC40(:,2);
-CI_GBC70 = VSCI_GBC70(:,2);
-CIemp = vertcat(CI_AN40, CI_AN70, CI_GBC40, CI_GBC70);
+CIemp = VSCImat(:,2); 
 
 %% Concentration parameter for von Mises distribution
 Ndata = length(VSemp);
 
 VStheo = zeros(Ndata, 1);
 CItheo = zeros(Ndata, 1);
-
+Kvs = zeros(Ndata, 1);
+Kci = zeros(Ndata, 1);
 for k = 1:Ndata
     % go from VS to estimated CI
     vsfun = @(K)(besseli(1,K) ./ besseli(0,K) - VSemp(k));
-    Kvs = fsolve(vsfun, 1.0, optimset('Display','off'));
-    CItheo(k) = besseli(0,2*Kvs) ./ (besseli(0,Kvs)^2);
+    Kvs(k) = fsolve(vsfun, 1.0, optimset('Display','off'));
+    CItheo(k) = besseli(0,2*Kvs(k)) ./ (besseli(0,Kvs(k))^2);
 
     % go from CI to estimated VS
     cifun = @(K)(besseli(0,2*K) ./ besseli(0,K)^2 - CIemp(k));
-    Kci = fsolve(cifun, 1.0, optimset('Display','off'));
-    VStheo(k) = besseli(1,Kci) ./ besseli(0,Kci);
+    Kci(k) = fsolve(cifun, 1.0, optimset('Display','off'));
+    VStheo(k) = besseli(1,Kci(k)) ./ besseli(0,Kci(k));
 
 end
 
 %% Calculate Errors 
-% 1:29 is AN 40db, 30:58 is AN 70db, 59:87 is GBC 40db, 88:116 is GBC 70db
 VS_error = (VSemp - VStheo) ./ VStheo;
 CI_error = (CIemp - CItheo) ./ CItheo;
 
 %% Plot results
-bin_width = 1;  % 5, 2.5
-edges = -205:bin_width:205;  % -20,5:205, -21.25:21.75
-
-figure
-% VS, AN
-subplot(2,2,1)
-histogram(100*VS_error(1:58), edges)
-title("VS Error (AN): (VSemp-VStheo)/VStheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-
-% CI, AN
-subplot(2,2,2)
-histogram(100*CI_error(1:58), edges)
-title("CI Error (AN): (CIemp-CItheo)/CItheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-
-% VS, GBC
-subplot(2,2,3)
-histogram(100*VS_error(end-58:end), edges)
-title("VS Error (GBC): (VSemp-VStheo)/VStheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-
-% CI, GBC
-subplot(2,2,4)
-histogram(100*CI_error(end-58:end), edges)
-title("CI Error (GBC): (CIemp-CItheo)/CItheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-
-
-%% Remove the outliers and re-do the plot
-
-% Identify the indices of the low stimulation data (<= 400Hz)
-% GBC70: index 12, 23, 24 corresponds to 200Hz, 300Hz, 400Hz 
-% GBC40: index 12, 23, 24 corresponds to 200Hz, 300Hz, 400Hz
-% AN70: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
-% AN40: indices 2, 3, 4 correspond to 200Hz, 300Hz, 400Hz
-
-% Extract the above cases from the error vectors
-VS_outlier = VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
-CI_outlier = CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:);
-
-% Remove the respective rows from the error vectors above
-%VS_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
-%CI_error([2,3,4,31,32,33,70,81,82,99,110,111],:) = [];
-
-%% Re-plot the histograms without the outliers
 bin_width = 1;
-edges = -20:bin_width:20;  % -205:bin_width:205;
+edges = -80.5:bin_width:80.5;  
 
 figure
-%VS,AN
-subplot(2,2,1)
-histogram(100*VS_error(1:58), edges)  % with outliers
-% histogram(100*VS_error(1:52), edges)  % without outliers
+subplot(1,2,1)
+histogram(100*VS_error, edges, "FaceColor", 'blue', "FaceAlpha", 1)
 hold on
-histogram(100*VS_outlier(1:6), edges)
-alpha(1)
+histogram(100*VS_error(VSemp < 0.1), edges, "FaceColor", 'red', ...
+    "FaceAlpha", 1)  % "EdgeColor", 'none'
 hold off
-title("VS Error Distribution (AN): (VSemp-VStheo)/VStheo")
+title("VS Error: (VSemp-VStheo)/VStheo")
+ylim([0,5])
 xlabel("rel. error [%]")
 ylabel("counts")
-legend("500-3000Hz","200-400Hz","Location","northeast")
+legend('VS >= 0.1', 'VS < 0.1', 'Location', 'northeast')
 
-subplot(2,2,2)
-histogram(100*CI_error(1:58), edges)  % with outliers
-% histogram(100*CI_error(1:52), edges)  % without outliers
-hold on
-histogram(100*CI_outlier(1:6), edges)
-alpha(1)
-hold off
-title("CI Error Distribution (AN): (CIemp-CItheo)/CItheo")
+subplot(1,2,2)
+histogram(100*CI_error, edges, "FaceColor", 'b', "FaceAlpha", 1)
+%hold on
+%histogram(100*CI_error(CIemp < 1), edges, "FaceColor", 'r')
+%alpha(1)
+%hold off
+title("CI Error: (CIemp-CItheo)/CItheo")
 xlabel("rel. error [%]")
 ylabel("counts")
-legend("500-3000Hz","200-400Hz","Location","northeast")
+%legend('CI >= 1', 'CI < 1', 'Location', 'northeast')
 
-subplot(2,2,3)
-histogram(100*VS_error(59:end), edges)  % with outliers
-% histogram(100*VS_error(end-52:end), edges)  % without outliers
-hold on
-histogram(100*VS_outlier(7:end), edges)
-alpha(1)
-hold off
-title("VS Error Distribution (GBC): (VSemp-VStheo)/VStheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-legend("500-3000Hz","200-400Hz","Location","northeast")
 
-subplot(2,2,4)
-histogram(100*CI_error(59:end), edges)  % with outliers
-% histogram(100*CI_error(end-52:end), edges)  % without outliers
-hold on
-histogram(100*CI_outlier(7:end), edges)
-alpha(1)
-hold off
-title("CI Error Distribution (GBC): (CIemp-CItheo)/CItheo")
-xlabel("rel. error [%]")
-ylabel("counts")
-legend("500-3000Hz","200-400Hz","Location","northeast")
+%% Identify the outliers
+% load preprocessed data
+addpath("..\Utils\")  % add helper functions
+path = "..\Source_Code\ANmodel\ANmod\";
+sf = 100;  % [kHz]
+cutoff = 15;  % [ms]
+data = PreprocessingSpikes_genDataAM(path, sf, cutoff);
+
+% concatenate the content of the field into one big cell array (56x11)
+dataCell = vertcat(data.ANmod20db7000Hz,data.ANmod40db7000Hz,...
+    data.ANmod60db7000Hz,data.ANmod80db7000Hz, data.ANmod20db10500Hz,...
+    data.ANmod40db10500Hz,data.ANmod60db10500Hz,data.ANmod80db10500Hz);
+
+%% VS error analysis
+VSoutliers_nr = numel(find(abs(VS_error*100) > 20));  % 13
+VSoutliers_idx = find(abs(VS_error*100) > 20);  % 2,9,15,16,22,24,30,37,43,45,50,52,53
+VSoutliers_vals = VS_error(VSoutliers_idx);
+
+%% CI error analysis
+CIoutliers_nr = numel(find(abs(CI_error*100) > 20));  % 1
+CIoutliers_idx = find(abs(CI_error*100) > 20);  % 43
+CIoutliers_vals = CI_error(CIoutliers_idx);
+
+%% Get the dB, CF and ENVfq from the outliers
+% VS
+VSoutlier_CF = zeros(length(VSoutliers_idx),1);
+VSoutlier_dB = zeros(length(VSoutliers_idx),1);
+VSoutlier_ENVfq = zeros(length(VSoutliers_idx),1);
+for k = 1:length(VSoutliers_idx)
+    [VSoutlier_CF(k), VSoutlier_dB(k), VSoutlier_ENVfq(k)] = ...
+        dataCell{VSoutliers_idx(k),[3,10,11]};
+end
+
+% CI
+[CIoutlier_CF, CIoutlier_dB, CIoutlier_ENVfq] = ...
+    dataCell{CIoutliers_idx,[3,10,11]};
+
