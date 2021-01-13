@@ -93,7 +93,7 @@ symb = ['d', '+', 's', 'x', 'o'];
 leg = string();  % init.
 
 % define the theoretical relation line
-kappa = 0:0.1:45;
+kappa = 0:0.1:80;
 VStheo = besseli(1,kappa) ./ besseli(0,kappa);
 CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
 
@@ -104,12 +104,19 @@ for f = 1:n_folders
    hold on
 end
 plot(CItheo, VStheo, '-k')  % reference line
+plot(CItheo*1.4, VStheo, '--', 'color', [0.4, 0.4, 0.4])  % CI = 1.4 * CI_est(VS)
+plot(CItheo*0.7, VStheo, '--', 'color', [0.6, 0.6, 0.6])  % CI = 0.7 * CI_est(VS)
+
+% cosmetics
 xlabel("CI")
 xlim([min(cellfun(@min,CI_folder))-1, max(cellfun(@max, CI_folder))+1])
 ylim([0, 1])
 xlim([0, 11])
 ylabel("VS")
-title("VS-CI Comparison")
+title("VS-CI Comparison (invivo)")
+leg(n_folders+1) = 'theo';  % legend extension
+leg(n_folders+2) = '1.4*CI_e_s_t(VS)';  % legend extension
+leg(n_folders+3) = '0.7*CI_e_s_t(VS)';  % legend extension
 legend(leg, 'Location', 'best')
 hold off
 
