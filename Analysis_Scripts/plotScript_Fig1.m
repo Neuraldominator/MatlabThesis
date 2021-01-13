@@ -145,9 +145,8 @@ ylim([0, numel(spt_stim_bad) + 5])
 %% Period Histogram - good example
 NB = 41;
 FQ_good = data_good.freq;  % frequency [Hz]
-[PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, ...
-                                    T1_good, T2_good, NB, FQ_good);  % spt_trunc_stim_good should yield same result
-
+[PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, T1_good, ...
+                                    T2_good, NB, FQ_good);  
                                 
 % plot
 figure
@@ -161,8 +160,7 @@ ylabel("spike rate [Hz]")
 NB = 41;
 FQ_bad = data_bad.freq;  % frequency [Hz]
 [PH_bad, PHtv_bad, VS_bad] = calcPhaseHist(spt_stim_bad, T1_bad, ...
-                                T2_bad, NB, FQ_bad);  % spt_trunc_stim_bad should yield same result
-
+                                T2_bad, NB, FQ_bad);
 
 % plot
 figure
@@ -181,7 +179,8 @@ TL = 6;  % max histogram bin
 % plot
 figure
 plot(SACtv_good, SAC_good, '-k')
-title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, VS_good, CI_good))
+title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, ...
+    VS_good, CI_good))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 
@@ -195,7 +194,8 @@ TL = 6;  % max histogram bin
 % plot
 figure
 plot(SACtv_bad, SAC_bad, '-k')
-title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, VS_bad, CI_bad))
+title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, ...
+    VS_bad, CI_bad))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 
