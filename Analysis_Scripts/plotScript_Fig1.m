@@ -1,7 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This code produces all the figures needed for Figure 1 of the paper, i.e.
 % raster plots, period histograms and SAC curves for one "good" and one
-% "bad" unit of the invivo data stored in "../Raw_Data/gatorNL/".
+% "bad" unit of the invivo data stored in "../Raw_Data/gatorNL/". More
+% specifically, the raw figures for panel A, C and E are generated here. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler, Jan 2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -78,8 +79,8 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([0, data_good.epoch])
-ylim([0, numel(spt_stim_good) + 5])
+xlim([0, 120])  % show trials from 0ms to 120ms
+ylim([0, numel(spt_stim_good) + 5])  % 51 (same number as in bad example raster)
 
 %% Some Preprocessing and Data Analysis - bad example unit
 filename_bad = "10.07.11.spikes.mat";
@@ -138,40 +139,44 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_bad))
-xlim([0, data_bad.epoch])
+xlim([0, 120])
 ylim([0, numel(spt_stim_bad) + 5])
 
 %% Period Histogram - good example
 NB = 41;
 FQ_good = data_good.freq;  % frequency [Hz]
-[PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_trunc_good, T1_good, ...
-    T2_good, NB, FQ_good);
+[PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, ...
+                                    T1_good, T2_good, NB, FQ_good);  % spt_trunc_stim_good should yield same result
 
+                                
 % plot
 figure
 plot(PHtv_good, PH_good)
-title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", filename_good, VS_good, FQ_good))
+title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
+        filename_good, VS_good, FQ_good))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
 
 %% Period Histogram - bad example
 NB = 41;
 FQ_bad = data_bad.freq;  % frequency [Hz]
-[PH_bad, PHtv_bad, VS_bad] = calcPhaseHist(spt_trunc_bad, T1_bad, ...
-    T2_bad, NB, FQ_bad);
+[PH_bad, PHtv_bad, VS_bad] = calcPhaseHist(spt_stim_bad, T1_bad, ...
+                                T2_bad, NB, FQ_bad);  % spt_trunc_stim_bad should yield same result
+
 
 % plot
 figure
 plot(PHtv_bad, PH_bad)
-title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", filename_bad, VS_bad, FQ_bad))
+title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
+        filename_bad, VS_bad, FQ_bad))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
 
 %% SAC curve - good example
 BW = 0.05;  % coincidence window in [ms]
 TL = 6;  % max histogram bin
-[SAC_good, SACtv_good, CI_good, ~, ~] = calcSAC(spt_trunc_good, BW, ...
-    T1_good, T2_good, TL);
+[SAC_good, SACtv_good, CI_good, ~, ~] = calcSAC(spt_stim_good, BW, ...
+                                            T1_good, T2_good, TL); 
 
 % plot
 figure
@@ -184,8 +189,8 @@ ylabel("norm. coincidences")
 %% SAC curve - bad example
 BW = 0.05;  % coincidence window in [ms]
 TL = 6;  % max histogram bin
-[SAC_bad, SACtv_bad, CI_bad, ~, ~] = calcSAC(spt_trunc_bad, BW, ...
-    T1_bad, T2_bad, TL);
+[SAC_bad, SACtv_bad, CI_bad, ~, ~] = calcSAC(spt_stim_bad, BW, T1_bad, ...
+                                        T2_bad, TL);
 
 % plot
 figure
@@ -193,6 +198,4 @@ plot(SACtv_bad, SAC_bad, '-k')
 title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, VS_bad, CI_bad))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-
-
 
