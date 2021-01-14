@@ -38,43 +38,43 @@ spt091 = gen_data.dec6_2020{idx091,1};
 figure
 VSin031 = gen_data.dec6_2020{idx031, 10};
 Nsp031 = gen_data.dec6_2020{idx031, 9};
-for k=1:400
+for k=1:51
    plot(spt031{k}, k*ones(1,length(spt031{k})), '.k', 'Markersize', 5)
    hold on
 end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin031, Nsp031))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-0.5, 155])
-ylim([0, 405])
+xlim([-0.5, 120])  % show trials from 0ms to 120ms
+ylim([0, 51.5])  % 51 (same number as in bad example raster)
 
 % 2nd raster plot VSin=0.61
 figure
 VSin061 = gen_data.dec6_2020{idx061, 10};
 Nsp061 = gen_data.dec6_2020{idx061, 9};
-for k=1:400
+for k=1:51
    plot(spt061{k}, k*ones(1,length(spt061{k})), '.k', 'Markersize', 5)
    hold on
 end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin061, Nsp061))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-0.5, 155])
-ylim([0, 405])
+xlim([-0.5, 120])  % show trials from 0ms to 120ms
+ylim([0, 51.5])  % 51 (same number as in bad example raster)
 
 % 3rd raster plot VSin=0.91
 figure
 VSin091 = gen_data.dec6_2020{idx091, 10};
 Nsp091 = gen_data.dec6_2020{idx091, 9};
-for k=1:400
+for k=1:51
    plot(spt091{k}, k*ones(1,length(spt091{k})), '.k', 'Markersize', 5)
    hold on
 end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin091, Nsp091))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-0.5, 155])
-ylim([0, 405])
+xlim([-0.5, 120])  % show trials from 0ms to 120ms
+ylim([0, 51.5])  % 51 (same number as in bad example raster)
 
 %% panel B: Phase histograms corresponding to the rasters in panel A
 % add path of source code provided by Go Ashida
@@ -99,6 +99,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f",...
     VSin031, VS031))
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
+xlim([-0.5 0.5])
 
 % phase histogram for VSin=0.61
 [PH061, PHtv061, VS061] = calcPhaseHist(spt061,T1,T2,NB,FQ);
@@ -108,6 +109,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
     VSin061, VS061))
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
+xlim([0 1])
 
 % phase histogram for VSin=0.91
 [PH091, PHtv091, VS091] = calcPhaseHist(spt091,T1,T2,NB,FQ);
@@ -117,6 +119,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
     VSin091, VS091))
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
+xlim([-0.5 0.5])
 
 %% panel C: VS-kappa curve
 kappa = 0:0.1:11;
