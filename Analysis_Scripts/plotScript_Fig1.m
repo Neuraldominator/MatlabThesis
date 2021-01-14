@@ -79,8 +79,8 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([0, 120])  % show trials from 0ms to 120ms
-ylim([0, numel(spt_stim_good) + 5])  % 51 (same number as in bad example raster)
+xlim([-0.5, 120])  % show trials from 0ms to 120ms
+ylim([0, 51.5])  % 51 (same number as in bad example raster)
 
 %% Some Preprocessing and Data Analysis - bad example unit
 filename_bad = "10.07.11.spikes.mat";
@@ -139,8 +139,8 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_bad))
-xlim([0, 120])
-ylim([0, numel(spt_stim_bad) + 5])
+xlim([-0.5, 120])  % show trials from 0ms to 120ms
+ylim([0, 51.5])  % 51 (same number as in bad example raster)
 
 %% Period Histogram - good example
 NB = 41;
