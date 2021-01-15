@@ -1,8 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This code produces all the figures needed for Figure 1 of the paper, i.e.
-% raster plots, period histograms and SAC curves for one "good" and one
-% "bad" unit of the invivo data stored in "../Raw_Data/gatorNL/". More
-% specifically, the raw figures for panel A, C and E are generated here. 
+% This code produces the figures needed for Figure 1A, 1C and 1E of the
+% paper, i.e. raster plots, period histograms and SAC curves for one "good"
+% unit (namely gatorNL 05.13.3) of the invivo data stored in
+% "../Raw_Data/gatorNL/".
+% Additionally, the script calculated these three plots for one "bad" unit
+% of the same data set, namely gatorNL 10.07.11
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler, Jan 2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,18 +71,18 @@ end
 spt_stim_good = spt_good(depvar ~= -6666);
 
 %% Raster Plot - good example unit
-figure
-for k = 1:numel(spt_stim_good)
-    plot(spt_stim_good{k}, k*ones(1,length(spt_stim_good{k})), '.k', ...
-        'MarkerSize', 5)
+f1 = figure(1);
+for k = 1:51  % don't use numel(spt_stim_good)
+    plot(spt_stim_good{k} - delay, k*ones(1,length(spt_stim_good{k})), ...
+        '.k', 'MarkerSize', 5)
     hold on
 end
 hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([-0.5, 120])  % show trials from 0ms to 120ms
-ylim([0, 51.5])  % 51 (same number as in bad example raster)
+xlim([-10, 120])  % show trials from 0ms to 120ms
+ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Some Preprocessing and Data Analysis - bad example unit
 filename_bad = "10.07.11.spikes.mat";
@@ -129,9 +131,9 @@ end
 spt_stim_bad = spt_bad(depvar ~= -6666);
 
 %% Raster Plot - bad example unit
-figure
+f2 = figure(2);
 for k = 1:numel(spt_stim_bad)
-    plot(spt_stim_bad{k}, k*ones(1,length(spt_stim_bad{k})), '.k', ...
+    plot(spt_stim_bad{k} - delay, k*ones(1,length(spt_stim_bad{k})), '.k', ...
         'MarkerSize', 5)
     hold on
 end
@@ -139,8 +141,8 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_bad))
-xlim([-0.5, 120])  % show trials from 0ms to 120ms
-ylim([0, 51.5])  % 51 (same number as in bad example raster)
+xlim([-10, 120])  % show trials from 0ms to 120ms
+ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Period Histogram - good example
 NB = 41;
@@ -149,12 +151,13 @@ FQ_good = data_good.freq;  % frequency [Hz]
                                     T2_good, NB, FQ_good);  
                                 
 % plot
-figure
+f3 = figure(3);
 plot(PHtv_good, PH_good)
 title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_good, VS_good, FQ_good))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
+ylim([0 165])
 
 %% Period Histogram - bad example
 NB = 41;
@@ -163,12 +166,13 @@ FQ_bad = data_bad.freq;  % frequency [Hz]
                                 T2_bad, NB, FQ_bad);
 
 % plot
-figure
+f4 = figure(4);
 plot(PHtv_bad, PH_bad)
 title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_bad, VS_bad, FQ_bad))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
+ylim([0 165])
 
 %% SAC curve - good example
 BW = 0.05;  % coincidence window in [ms]
@@ -177,13 +181,13 @@ TL = 6;  % max histogram bin
                                             T1_good, T2_good, TL); 
 
 % plot
-figure
+f5 = figure(5);
 plot(SACtv_good, SAC_good, '-k')
 title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, ...
     VS_good, CI_good))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-
+ylim([0 4.5])
 
 %% SAC curve - bad example
 BW = 0.05;  % coincidence window in [ms]
@@ -192,10 +196,11 @@ TL = 6;  % max histogram bin
                                         T2_bad, TL);
 
 % plot
-figure
+f6 = figure(6);
 plot(SACtv_bad, SAC_bad, '-k')
 title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, ...
     VS_bad, CI_bad))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
+ylim([0 4.5])
 
