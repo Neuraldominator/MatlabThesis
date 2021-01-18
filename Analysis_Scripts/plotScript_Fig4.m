@@ -34,17 +34,21 @@ BW = 0.05;  % coincidence window for SAC [ms]
 TL = 8;  % max histogram bin for SAC
 NB = 41;  % number of bins for phase histogram
 
-% set number of repetitions that are displayed in the raster (cf. Fig 1)
-Nrep = 51;  
+Nrep = 51;  % number of reps displayed in the raster (cf. Fig 1)
+M = 400;  % number of spike trains being used for phase histogram and SAC
 
 %% panel D: Raster plot GBC
 % convert binary spikes into spike times with temp. resolution dt=0.01
-sptGBC = cell(1, Nrep);
+sptGBC = cell(1, 400);
+for k = 1:400
+   sptGBC{k} = find(GBC.BCout(k,:)==1) * dt;  % spike times in [ms]
+end
+
+% plot raster
 f1 = figure(1);
-for k = 1:Nrep
-    sptGBC{k} = find(GBC.BCout(k,:)==1) * dt - delay;  % spike times in [ms], stimulation start = 0ms
-    plot(sptGBC{k}, k*ones(1,length(sptGBC{k})), 'k.', 'MarkerSize', 5)
-    hold on
+for k = 1:Nrep  % stimulation start = 0ms
+   plot(sptGBC{k} - delay, k*ones(1,length(sptGBC{k})), 'k.', 'MarkerSize', 5)
+   hold on
 end
 xlabel('time (ms)')
 ylabel('repetition')
@@ -53,13 +57,18 @@ xlim([-25, 120])  % show trials from -25ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% panel G: Raster plot AN
-% convert binary spikes into spike times
-sptAN = cell(1, Nrep);
+% convert binary spikes into spike times with temp. resolution dt=0.01
+sptAN = cell(1, 400);
+for k = 1:400
+   sptAN{k} = find(AN.ANout(k,:)==1) * dt;  % spike times in [ms]
+end
+
+% plot raster
 f2 = figure(2);
-for k = 1:Nrep
-    sptAN{k} = find(AN.ANout(k,:)==1) * dt - delay;  % spike times in [ms], stimulation start = 0ms
-    plot(sptAN{k}, k*ones(1,length(sptAN{k})), 'k.', 'MarkerSize', 5)
-    hold on
+for k = 1:Nrep  % stimulation start = 0ms
+   sptAN{k} = find(AN.ANout(k,:)==1) * dt;  % spike times in [ms], stimulation start = 0ms
+   plot(sptAN{k} - delay, k*ones(1,length(sptAN{k})), 'k.', 'MarkerSize', 5)
+   hold on
 end
 xlabel('time (ms)')
 ylabel('repetition')
