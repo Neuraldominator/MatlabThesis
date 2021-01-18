@@ -44,7 +44,7 @@ plot(CI, VS, '+b')
 hold on
 
 % reference lines
-kappa = 0:0.1:45;
+kappa = 0:0.1:60;
 VStheo = besseli(1,kappa) ./ besseli(0,kappa);
 CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
 plot(CItheo, VStheo, '-k')

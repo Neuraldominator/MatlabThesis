@@ -172,7 +172,7 @@ title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_bad, VS_bad, FQ_bad))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 165])
+ylim([0 60])
 
 %% SAC curve - good example
 BW = 0.05;  % coincidence window in [ms]

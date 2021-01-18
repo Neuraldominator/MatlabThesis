@@ -104,6 +104,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f",...
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
+ylim([0 1800])
 
 % phase histogram for VSin=0.61
 [PH061, PHtv061, VS061] = calcPhaseHist(spt061,T1,T2,NB,FQ);
@@ -120,6 +121,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
+ylim([0 1800])
 
 % phase histogram for VSin=0.91
 [PH091, PHtv091, VS091] = calcPhaseHist(spt091,T1,T2,NB,FQ);
@@ -136,6 +138,7 @@ title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
 xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
+ylim([0 1800])
 
 %% panel C: VS-kappa curve
 kappa = 0:0.1:11;
