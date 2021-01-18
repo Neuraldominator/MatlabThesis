@@ -31,7 +31,7 @@ T2 = epoch;  % stimulus goes until very end of simulation
 
 % function inputs for calcPhaseHist.m and calcSAC.m
 BW = 0.05;  % coincidence window for SAC [ms]
-TL = 8;  % max histogram bin for SAC
+TL = 12;  % max histogram bin for SAC
 NB = 41;  % number of bins for phase histogram
 
 Nrep = 51;  % number of reps displayed in the raster (cf. Fig 1)
@@ -86,7 +86,7 @@ plot(PHtv_GBC, PH_GBC)
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename1, VS_GBC))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 200])
+ylim([0 1800])
 
 %% panel H: Phase Histogram AN
 FQ = 200;  % stimulation frequency [Hz]
@@ -98,7 +98,7 @@ plot(PHtv_AN, PH_AN)
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename2, VS_AN))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 200])
+ylim([0 1800])
 
 %% panel F: SAC GBC
 [SAC_GBC, SACtv_GBC, CI_GBC, ~, ~] = calcSAC(sptGBC, BW, T1, T2, TL);
@@ -109,7 +109,8 @@ plot(SACtv_GBC, SAC_GBC, '-k')
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename1, VS_GBC, CI_GBC))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 5])
+ylim([0 4.5])
+xlim([-TL TL])
 
 
 %% panel I: SAC AN
@@ -121,6 +122,5 @@ plot(SACtv_AN, SAC_AN, '-k')
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename2, VS_AN, CI_AN))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 5])
-
-
+ylim([0 4.5])
+xlim([-TL TL])
