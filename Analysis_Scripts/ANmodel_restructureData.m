@@ -44,7 +44,7 @@ addpath("..\Utils")
 % retrieve some relevant parameters from "..\Source_Code\ANmodel\trainAN.m"
 %dt = 0.01; % [ms] time step -- 100kHz sampling rate
 %epoch = 200;  % duration [ms] of entire simulation
-%delay = 25;  % [ms] start of stimulus (5s ramping)
+%delay = 25;  % [ms] start of stimulus (5ms ramping)
 
 % set the start T1 and end T2 of the analysis window
 %T1 = delay + cutoff;
