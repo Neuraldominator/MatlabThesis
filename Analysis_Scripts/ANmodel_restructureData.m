@@ -4,7 +4,7 @@
 % "..\Source_Code\ANmodel\GBCdata". The folder ANdata is subdivided into 3
 % folders called "ANdata0", "ANdata1" and "ANdata2". The aim of this script
 % is to preprocess the data to create the infamous VS-CI plot for this 
-% project (this is done in the scipt "ANmodel_VSCI_plot.m").
+% project (the latter is is done in the scipt "ANmodel_VSCI_plot.m").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 1.1 Add data file paths (AN)
@@ -49,6 +49,8 @@ addpath("..\Utils")
 % set the start T1 and end T2 of the analysis window
 %T1 = delay + cutoff;
 %T2 = epoch;  % stimulus goes until very end of simulation
+
+% coincidence window for SAC [ms]
 BW = 0.05;
 
 %% 4. Arange the AN data in the fields of the Data struct  
