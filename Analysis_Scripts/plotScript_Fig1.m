@@ -3,8 +3,8 @@
 % paper, i.e. raster plots, period histograms and SAC curves for one "good"
 % unit (namely gatorNL 05.13.3) of the invivo data stored in
 % "../Raw_Data/gatorNL/".
-% Additionally, the script calculated these three plots for one "bad" unit
-% of the same data set, namely gatorNL 10.07.11
+% Additionally, the script calculates the three plots for one "bad" unit
+% of the same data set, namely gatorNL 10.07.11, which is used in Fig 4A-C.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler, Jan 2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
