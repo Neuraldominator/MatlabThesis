@@ -16,7 +16,7 @@ path = strcat("C:\Users\Dominik\Documents\Uni_Oldenburg\5th_semester\", ...
 cd(path)
 
 % access the repo from Ashida for calcSAC.m and calcPhaseHist.m
-addpath("..\Source_Code\Ashida_2020_code\invivo")
+addpath("../Source_Code/Ashida_2020_code/invivo")
 
 % set data path
 path_data = "../Raw_Data/gatorNL/";
@@ -81,7 +81,7 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([-10, 120])  % show trials from 0ms to 120ms
+xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Some Preprocessing and Data Analysis - bad example unit
@@ -141,7 +141,7 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_bad))
-xlim([-10, 120])  % show trials from 0ms to 120ms
+xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Period Histogram - good example
