@@ -88,13 +88,14 @@ T1 = delay + cutoff; % start of analysis [ms]
 T2 = delay + durat; % enf of analysis [ms]
 NB = 42;  % number of bins used for the histogram
 FQ = gen_data.dec6_2020{1,3};  % stimulation frequency
+mid = ceil(NB/2);
 
 % phase histogram for VSin=0.31
 [PH031, PHtv031, VS031] = calcPhaseHist(spt031,T1,T2,NB,FQ);
 
 % change the bins to that the peak is centered in [-0.5, 0.5]
-bins031 = [PHtv031(22:end)-1, PHtv031(1:21)];
-yy031 = [PH031(22:end), PH031(1:21)];
+bins031 = [PHtv031(mid+1:end)-1, PHtv031(1:mid)];
+yy031 = [PH031(mid+1:end), PH031(1:mid)];
 
 % plot (VSin=0.31)
 f4 = figure(4);
@@ -113,8 +114,8 @@ ylim([0 1800])
 [PH061, PHtv061, VS061] = calcPhaseHist(spt061,T1,T2,NB,FQ);
 
 % change the bins to that the peak is centered in [-0.5, 0.5]
-bins061 = [PHtv061(22:end)-1, PHtv061(1:21)];
-yy061 = [PH061(22:end), PH061(1:21)];
+bins061 = [PHtv061(mid+1:end)-1, PHtv061(1:mid)];
+yy061 = [PH061(mid+1:end), PH061(1:mid)];
 
 % plot (VSin=0.61)
 f5 = figure(5);
@@ -133,8 +134,8 @@ ylim([0 1800])
 [PH091, PHtv091, VS091] = calcPhaseHist(spt091,T1,T2,NB,FQ);
 
 % change the bins to that the peak is centered in [-0.5, 0.5]
-bins091 = [PHtv091(22:end)-1, PHtv091(1:21)];
-yy091 = [PH091(22:end), PH091(1:21)];
+bins091 = [PHtv091(mid+1:end)-1, PHtv091(1:mid)];
+yy091 = [PH091(mid+1:end), PH091(1:mid)];
 
 % plot (VSin=0.91)
 f6 = figure(6);
