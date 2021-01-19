@@ -32,9 +32,9 @@ T2 = epoch;  % stimulus goes until very end of simulation
 % function inputs for calcPhaseHist.m and calcSAC.m
 BW = 0.05;  % coincidence window for SAC [ms]
 TL = 12;  % max histogram bin for SAC
-NB = 51;  % number of bins for phase histogram
+NB = 41;  % number of bins for phase histogram
 
-Nrep = 51;  % number of reps displayed in the raster (cf. Fig 1)
+Nrep = 42;  % number of reps displayed in the raster (cf. Fig 1)
 M = 400;  % number of spike trains being used for phase histogram and SAC
 
 %% panel D: Raster plot GBC
@@ -94,7 +94,8 @@ set(p3, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename1, VS_GBC))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 1600])
+%ylim([0 1600])  % for NB=51
+ylim([0 1800])  % for NB=41
 xlim([-0.5 0.5])
 
 %% panel H: Phase Histogram AN
@@ -116,7 +117,8 @@ set(p4, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename2, VS_AN))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 1600])
+%ylim([0 1600])  % for NB=51
+ylim([0 1800])  % for NB=41
 xlim([-0.5 0.5])
 
 %% panel F: SAC GBC
