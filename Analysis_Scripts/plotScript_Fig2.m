@@ -86,7 +86,7 @@ delay = gen_data.dec6_2020{1,6};
 cutoff = gen_data.dec6_2020{1,7};
 T1 = delay + cutoff; % start of analysis [ms] 
 T2 = delay + durat; % enf of analysis [ms]
-NB = 41;  % number of bins used for the histogram
+NB = 42;  % number of bins used for the histogram
 FQ = gen_data.dec6_2020{1,3};  % stimulation frequency
 
 % phase histogram for VSin=0.31
@@ -98,7 +98,10 @@ yy031 = [PH031(22:end), PH031(1:21)];
 
 % plot (VSin=0.31)
 f4 = figure(4);
-plot(bins031, yy031, '-k')
+% plot(bins031, yy031, '-k')
+p4 = bar(bins031, yy031, 'histc');
+set(p4, 'FaceColor', 'k')
+set(p4, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f",...
     VSin031, VS031))
 xlabel("phase (cycle)")
@@ -115,7 +118,10 @@ yy061 = [PH061(22:end), PH061(1:21)];
 
 % plot (VSin=0.61)
 f5 = figure(5);
-plot(bins061, yy061, '-k')
+% plot(bins061, yy061, '-k')
+p5 = bar(bins061, yy061, 'histc');
+set(p5, 'FaceColor', 'k')
+set(p5, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
     VSin061, VS061))
 xlabel("phase (cycle)")
@@ -132,7 +138,10 @@ yy091 = [PH091(22:end), PH091(1:21)];
 
 % plot (VSin=0.91)
 f6 = figure(6);
-plot(bins091, yy091, '-k')
+% plot(bins091, yy091, '-k')
+p6 = bar(bins091, yy091, 'histc');
+set(p6, 'FaceColor', 'k')
+set(p6, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - simulated data VSin=%.2f, VSout=%.2f", ...
     VSin091, VS091))
 xlabel("phase (cycle)")
