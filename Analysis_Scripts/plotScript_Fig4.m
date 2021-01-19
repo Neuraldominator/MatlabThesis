@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This code produces the figures needed for Figure 4D-I of the paper, i.e.
 % raster plots, period histograms and SAC curves for two simulated units of
-% the ANmodel with skewed/bimodal spiking distributions, namely
+% the ANmodel with skewed / bimodal spiking distributions, namely
 % GBC200Hz40db and AN200Hz70db.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler, Jan 2021
@@ -32,7 +32,7 @@ T2 = epoch;  % stimulus goes until very end of simulation
 % function inputs for calcPhaseHist.m and calcSAC.m
 BW = 0.05;  % coincidence window for SAC [ms]
 TL = 12;  % max histogram bin for SAC
-NB = 41;  % number of bins for phase histogram
+NB = 51;  % number of bins for phase histogram
 
 Nrep = 51;  % number of reps displayed in the raster (cf. Fig 1)
 M = 400;  % number of spike trains being used for phase histogram and SAC
@@ -66,7 +66,6 @@ end
 % plot raster
 f2 = figure(2);
 for k = 1:Nrep  % stimulation start = 0ms
-   sptAN{k} = find(AN.ANout(k,:)==1) * dt;  % spike times in [ms], stimulation start = 0ms
    plot(sptAN{k} - delay, k*ones(1,length(sptAN{k})), 'k.', 'MarkerSize', 5)
    hold on
 end
@@ -80,25 +79,45 @@ ylim([0, 52])  % 51 (same number as in bad example raster)
 FQ = 200;  % stimulation frequency [Hz]
 [PH_GBC, PHtv_GBC, VS_GBC] = calcPhaseHist(sptGBC, T1, T2, NB, FQ);
 
+% rearrange the histogram to cycle [-0.5 0.5]
+xx_GBC = [PHtv_GBC(22:end)-1, PHtv_GBC(1:21)];
+yy_GBC = [PH_GBC(22:end), PH_GBC(1:21)];
+
 % plot
 f3 = figure(3);
-plot(PHtv_GBC, PH_GBC)
+% plot(PHtv_GBC, PH_GBC, 'k-')  % uncentered
+% bar(PHtv_GBC, PH_GBC)  % uncentered
+% plot(xx_GBC, yy_GBC, 'k-')  % centered
+p3 = bar(xx_GBC, yy_GBC, 'histc');  % centered
+set(p3, 'FaceColor', 'k')
+set(p3, 'EdgeColor', 'k') 
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename1, VS_GBC))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 1800])
+ylim([0 1600])
+xlim([-0.5 0.5])
 
 %% panel H: Phase Histogram AN
 FQ = 200;  % stimulation frequency [Hz]
 [PH_AN, PHtv_AN, VS_AN] = calcPhaseHist(sptAN, T1, T2, NB, FQ);
 
+% rearrange the histogram to cycle [-0.5 0.5]
+xx_AN = [PHtv_AN(22:end)-1, PHtv_AN(1:21)];
+yy_AN = [PH_AN(22:end), PH_AN(1:21)];
+
 % plot
 f4 = figure(4);
-plot(PHtv_AN, PH_AN)
+% plot(PHtv_AN, PH_AN, 'k-')  % uncentered
+% bar(PHtv_AN, PH_AN)  % uncentered
+% plot(xx_AN, yy_AN, 'k-')  % centered
+p4 = bar(xx_AN, yy_AN, 'histc');  % centered
+set(p4, 'FaceColor', 'k')
+set(p4, 'EdgeColor', 'k') 
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename2, VS_AN))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 1800])
+ylim([0 1600])
+xlim([-0.5 0.5])
 
 %% panel F: SAC GBC
 [SAC_GBC, SACtv_GBC, CI_GBC, ~, ~] = calcSAC(sptGBC, BW, T1, T2, TL);
@@ -106,6 +125,7 @@ ylim([0 1800])
 % plot
 f5 = figure(5);
 plot(SACtv_GBC, SAC_GBC, '-k')
+% bar(SACtv_GBC, SAC_GBC)
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename1, VS_GBC, CI_GBC))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
@@ -119,6 +139,7 @@ xlim([-TL TL])
 % plot
 f6 = figure(6);
 plot(SACtv_AN, SAC_AN, '-k')
+% bar(SACtv_AN, SAC_AN)
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename2, VS_AN, CI_AN))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
