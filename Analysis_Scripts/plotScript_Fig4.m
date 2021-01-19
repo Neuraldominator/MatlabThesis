@@ -34,7 +34,7 @@ BW = 0.05;  % coincidence window for SAC [ms]
 TL = 12;  % max histogram bin for SAC
 NB = 41;  % number of bins for phase histogram
 
-Nrep = 42;  % number of reps displayed in the raster (cf. Fig 1)
+Nrep = 51;  % number of reps displayed in the raster (cf. Fig 1)
 M = 400;  % number of spike trains being used for phase histogram and SAC
 
 %% panel D: Raster plot GBC
@@ -80,8 +80,9 @@ FQ = 200;  % stimulation frequency [Hz]
 [PH_GBC, PHtv_GBC, VS_GBC] = calcPhaseHist(sptGBC, T1, T2, NB, FQ);
 
 % rearrange the histogram to cycle [-0.5 0.5]
-xx_GBC = [PHtv_GBC(22:end)-1, PHtv_GBC(1:21)];
-yy_GBC = [PH_GBC(22:end), PH_GBC(1:21)];
+mid = ceil(NB/2); 
+xx_GBC = [PHtv_GBC(mid+1:end)-1, PHtv_GBC(1:mid)];
+yy_GBC = [PH_GBC(mid+1:end), PH_GBC(1:mid)];
 
 % plot
 f3 = figure(3);
@@ -94,8 +95,11 @@ set(p3, 'EdgeColor', 'k')
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename1, VS_GBC))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-%ylim([0 1600])  % for NB=51
-ylim([0 1800])  % for NB=41
+if NB==51
+   ylim([0 1600])  % for NB=51
+elseif NB==41
+   ylim([0 1800])  % for NB=41
+end
 xlim([-0.5 0.5])
 
 %% panel H: Phase Histogram AN
@@ -103,22 +107,25 @@ FQ = 200;  % stimulation frequency [Hz]
 [PH_AN, PHtv_AN, VS_AN] = calcPhaseHist(sptAN, T1, T2, NB, FQ);
 
 % rearrange the histogram to cycle [-0.5 0.5]
-xx_AN = [PHtv_AN(22:end)-1, PHtv_AN(1:21)];
-yy_AN = [PH_AN(22:end), PH_AN(1:21)];
+xx_AN = [PHtv_AN(mid+1:end)-1, PHtv_AN(1:mid)];
+yy_AN = [PH_AN(mid+1:end), PH_AN(1:mid)];
 
 % plot
 f4 = figure(4);
 % plot(PHtv_AN, PH_AN, 'k-')  % uncentered
 % bar(PHtv_AN, PH_AN)  % uncentered
-% plot(xx_AN, yy_AN, 'k-')  % centered
+%plot(xx_AN, yy_AN, 'k-')  % centered
 p4 = bar(xx_AN, yy_AN, 'histc');  % centered
 set(p4, 'FaceColor', 'k')
 set(p4, 'EdgeColor', 'k') 
 title(sprintf("Phase Histogram - %s, VS=%.2f", filename2, VS_AN))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-%ylim([0 1600])  % for NB=51
-ylim([0 1800])  % for NB=41
+if NB==51
+   ylim([0 1600])  % for NB=51
+elseif NB==41 
+   ylim([0 1800])  % for NB=41
+end
 xlim([-0.5 0.5])
 
 %% panel F: SAC GBC
