@@ -145,14 +145,17 @@ xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Period Histogram - good example
-NB = 41;
+NB = 42;
 FQ_good = data_good.freq;  % frequency [Hz]
 [PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, T1_good, ...
                                     T2_good, NB, FQ_good);  
                                 
 % plot
 f3 = figure(3);
-plot(PHtv_good, PH_good)
+% plot(PHtv_good, PH_good)
+p3 = bar(PHtv_good, PH_good, 'histc');
+set(p3, 'FaceColor', 'k')
+set(p3, 'EdgeColor', 'k') 
 title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_good, VS_good, FQ_good))
 xlabel("phase (cycle)")
@@ -160,14 +163,17 @@ ylabel("spike rate [Hz]")
 ylim([0 165])
 
 %% Period Histogram - bad example
-NB = 41;
+NB = 42;  % should match NB above
 FQ_bad = data_bad.freq;  % frequency [Hz]
 [PH_bad, PHtv_bad, VS_bad] = calcPhaseHist(spt_stim_bad, T1_bad, ...
                                 T2_bad, NB, FQ_bad);
 
 % plot
 f4 = figure(4);
-plot(PHtv_bad, PH_bad)
+% plot(PHtv_bad, PH_bad)
+p4 = bar(PHtv_bad, PH_bad, 'histc');
+set(p4, 'FaceColor', 'k')
+set(p4, 'EdgeColor', 'k') 
 title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_bad, VS_bad, FQ_bad))
 xlabel("phase (cycle)")
