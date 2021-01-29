@@ -99,6 +99,9 @@ for k1 = 1:8
     end
 end
 plot(CItheo, VStheo, '-', 'LineWidth', 1.1, 'color', 'k')  % theo VS-CI
+plot(CItheo*1.4, VStheo, '--', 'color', [0.4, 0.4, 0.4])  % CI = 1.4 * CI_est(VS)
+plot(CItheo*0.7, VStheo, '--', 'color', [0.6, 0.6, 0.6])  % CI = 0.7 * CI_est(VS)
+
 title("VS-CI relation (AM data), filled: CF=7000Hz, unfilled: CF=10500Hz")
 xlabel("CI")
 ylabel("VS")
