@@ -22,6 +22,8 @@ plot(VSCI_AN70(:,2), VSCI_AN70(:,1), 'ro')  % AN 70db
 plot(VSCI_GBC40(:,2), VSCI_GBC40(:,1), 'g*')  % GBC 40db
 plot(VSCI_GBC70(:,2), VSCI_GBC70(:,1), 'ys')  % GBC 70db
 plot(CItheo, VStheo, '-', 'LineWidth', 1.1, 'color', 'k')  % theo VS-CI
+plot(CItheo*1.4, VStheo, '--', 'color', [0.4, 0.4, 0.4])  % CI = 1.4 * CI_est(VS)
+plot(CItheo*0.7, VStheo, '--', 'color', [0.6, 0.6, 0.6])  % CI = 0.7 * CI_est(VS)
 
 title("VS-CI relationship for generated data (ANmodel)")
 xlabel("CI")
