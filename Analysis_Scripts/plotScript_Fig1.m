@@ -145,7 +145,7 @@ xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% Period Histogram - good example
-NB = 42;
+NB = 51;
 FQ_good = data_good.freq;  % frequency [Hz]
 [PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, T1_good, ...
                                     T2_good, NB, FQ_good);  
@@ -163,7 +163,7 @@ ylabel("spike rate [Hz]")
 ylim([0 165])
 
 %% Period Histogram - bad example
-NB = 42;  % should match NB above
+NB = 51;  % should match NB above
 FQ_bad = data_bad.freq;  % frequency [Hz]
 [PH_bad, PHtv_bad, VS_bad] = calcPhaseHist(spt_stim_bad, T1_bad, ...
                                 T2_bad, NB, FQ_bad);
@@ -197,7 +197,7 @@ ylim([0 4.5])
 
 %% SAC curve - bad example
 BW = 0.05;  % coincidence window in [ms]
-TL = 6;  % max histogram bin
+TL = 9;  % max histogram bin
 [SAC_bad, SACtv_bad, CI_bad, ~, ~] = calcSAC(spt_stim_bad, BW, T1_bad, ...
                                         T2_bad, TL);
 
@@ -209,4 +209,5 @@ title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, ...
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
+xlim([-9 9])
 
