@@ -53,7 +53,7 @@ end
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - %s', filename1))
-xlim([-25, 120])  % show trials from -25ms to 120ms
+xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% panel G: Raster plot AN
@@ -72,7 +72,7 @@ end
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - %s', filename2))
-xlim([-25, 120])  % show trials from -25ms to 120ms
+xlim([-10, 120])  % show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
 %% panel E: Phase Histogram GBC
@@ -139,7 +139,7 @@ title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename1, VS_GBC, CI_GBC))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
-xlim([-TL TL])
+xlim([-9 9])
 
 
 %% panel I: SAC AN
@@ -153,4 +153,4 @@ title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename2, VS_AN, CI_AN))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
-xlim([-TL TL])
+xlim([-9 9])
