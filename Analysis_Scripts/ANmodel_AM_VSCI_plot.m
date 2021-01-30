@@ -37,7 +37,7 @@ symb = {'d', 's', 'o', '<'};  % one for each dB level (20, 40, 60, 80)
     
 % MarkerFaceColor indicates CF=7000Hz (filled) or 10500Hz (unfilled)
 
-figure
+f1 = figure;
 N = size(VSCIcell, 1);
 for k1 = 1:8
     for k2 = 1:7
@@ -107,6 +107,7 @@ xlabel("CI")
 ylabel("VS")
 xlim([0.5, 2.5])
 ylim([0, 1])
+set(f1,'Position',[360 198 726 350])
 
 % work-around for customizing legend
 h = zeros(8,1);
