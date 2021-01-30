@@ -39,15 +39,14 @@ for k = 1:N
 end
 
 %% 4. Plot VS against CI
-figure
-plot(CI, VS, '+b')
-hold on
-
-% reference lines
 kappa = 0:0.1:60;
 VStheo = besseli(1,kappa) ./ besseli(0,kappa);
 CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
-plot(CItheo, VStheo, '-k')
+
+f1 = figure;
+plot(CI, VS, '+b')
+hold on
+plot(CItheo, VStheo, '-k') % reference line
 hold off
 
 % plot cosmetics
@@ -57,6 +56,7 @@ ylabel("VS")
 ylim([0, 1])
 xlim([0, 11])
 legend("generated data", "theoretical line", "Location", "southeast")
+set(f1,'Position',[360 198 726 350])
 
 %% compare VSin with empirical VS values 
 
