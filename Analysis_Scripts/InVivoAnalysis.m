@@ -97,7 +97,7 @@ kappa = 0:0.1:80;
 VStheo = besseli(1,kappa) ./ besseli(0,kappa);
 CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
 
-figure
+f1 = figure;
 for f = 1:n_folders
    leg(f) = folders(f) + " (N=" + string(numel(CI_folder{f})) + ")";
    plot(CI_folder{f},VS_folder{f},symb(f),'color',cols{f})
@@ -119,4 +119,4 @@ leg(n_folders+2) = '1.4*CI_e_s_t(VS)';  % legend extension
 leg(n_folders+3) = '0.7*CI_e_s_t(VS)';  % legend extension
 legend(leg, 'Location', 'best')
 hold off
-
+set(f1,'Position',[360 198 726 350])
