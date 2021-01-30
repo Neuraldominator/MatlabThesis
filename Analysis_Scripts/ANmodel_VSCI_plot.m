@@ -9,7 +9,7 @@
 load("VSCI_ANmodel.mat")
 
 %% 1. Sample the theoretical VS-CI relationship (for plot)
-kappa = 0:0.1:40;
+kappa = 0:0.1:80;
 % Nk = length(kappa);
 VStheo = besseli(1,kappa) ./ besseli(0,kappa);
 CItheo = besseli(0,2*kappa) ./ (besseli(0,kappa)).^2;
