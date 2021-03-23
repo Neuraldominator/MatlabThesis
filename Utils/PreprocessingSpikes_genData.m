@@ -49,11 +49,11 @@ for k1 = 1:Ndata
     % retrieve the stimulation start etc from the time vector 
     Nsteps = size(con{k1, 4}, 2);  % number of simulated time steps
     epoch = Nsteps * dt;  % total simulation length [ms]
-    delay = find(con{k1,4}==0)*0.01;  % start of stimulus [ms]
+    delay = find(con{k1,4}==0) * dt;  % start of stimulus [ms]
     
     % set the start T1 and end T2 of the analysis window
     T1 = delay + cutoff;
-    T2 = epoch;  % stimulus goes until very end of simulation
+    T2 = 190;  % T2 = epoch;  % stimulus goes until very end of simulation
     
     % convert binary spike trains to spike times "TSP" [ms]
     TSP = cell(M, 1);  % pre-allocation
