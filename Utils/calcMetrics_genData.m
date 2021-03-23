@@ -24,6 +24,9 @@ function [VSCI] = calcMetrics_genData(path, db, celltype, BW)
 %                    second column contains the CI values.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Comment: to change the analysis window, you have to edit the T1 or T2
+% parameters below. For T2 = con{idx,4}, the analysis end is at 200ms.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % written by Dominik Kessler (Dec 2020)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if nargin < 4
@@ -46,7 +49,7 @@ Ndata = size(con, 1);  % number of datasets
 VSCI = zeros(Ndata, 2);  % pre-allocation
 for idx = 1:Ndata
     T1 = con{idx,6} + con{idx,7};  % delay [ms] + cutoff [ms]
-    T2 = con{idx,4};  % epoch [ms]
+    T2 = 190;  % T2 = con{idx,4};  % custom value or epoch [ms]
     [~, ~, VSCI(idx,1)] = calcPhaseHist(con{idx,1}, T1, T2, NB, con{idx,3});
     [~, ~, VSCI(idx,2), ~, ~] = calcSAC(con{idx,1}, BW, T1, T2, TL);
 end
