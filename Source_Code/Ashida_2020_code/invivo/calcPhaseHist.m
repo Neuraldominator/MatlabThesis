@@ -41,7 +41,7 @@ VS = sqrt( VScc*VScc + VSss*VSss ) / VSnn;
 PHtv = (0:NB-1)/NB;
 PH = zeros(1,NB); 
 for c = 1:Nreps
- PHidx = floor( mod((FQ*SP{c}/1000),1) * NB) +1; % phase index vector
+ PHidx = floor( mod((FQ*SP{c}/1000),1) * NB) + 1; % phase index vector
  for i=1:length(PHidx)
    PH(PHidx(i)) = PH(PHidx(i)) + 1;
  end
