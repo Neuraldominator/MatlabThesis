@@ -13,15 +13,15 @@ BWall = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,...
          1500,1600,1700,1800,1900,2000 ]; 
 
 BWodd = [2,6,10,14,18,30,50,70,90,110,130,150,170,190,...
-         210,250,350,450,550,650,750,850,950];
+         210,250,350,450,550,650,750,850,950];  % check: (BWodd/1000)/0.002
 [~,IDodd] = ismember(BWodd,BWall); % get the corresponding indices
 
 BWevn = [4,8,12,16,20,40,60,80,100,120,140,160,180,200,240,...
-         300,400,500,600,700,800,900,1000];
+         300,400,500,600,700,800,900,1000];  % check: (BWevn/1000)/0.002
 [~,IDevn] = ismember(BWevn,BWall); % get the corresponding indices
 
 BWnon = [3,5,7,9,11,13,15,17,19,25,35,45,55,65,75,85,95,105,...
-         115,125,135,145,155,165,175,185,195,205,305,505,705,905];
+         115,125,135,145,155,165,175,185,195,205,305,505,705,905];  % check: (BWnon/1000)/0.002
 [~,IDnon] = ismember(BWnon,BWall); % get the corresponding indices
 
 BWbig = [1100,1200,1300,1400,1500,1600,1700,1800,1900,2000];
@@ -34,8 +34,8 @@ disp([length(BWall), length(BWodd), length(BWevn), length(BWnon), length(BWbig)]
 %% calculating SAC/CI for varied BW
 
 % loading data file
-infile = 'SPv60all.mat'; 
-load(infile); 
+infile = 'SPv60all.mat';  
+load(infile);  % DT = 0.002 [ms]
 
 % data vector
 CIall = zeros(length(BWall),Nreps); 
