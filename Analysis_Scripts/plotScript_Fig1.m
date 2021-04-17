@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This code produces the figures needed for Figure 1A, 1C and 1E of the
 % paper, i.e. raster plots, period histograms and SAC curves for one "good"
-% unit (namely gatorNL 05.13.3) of the invivo data stored in
-% "../Raw_Data/gatorNL/".
+% unit (namely gatorNL 05.13.3 and/or gatorNL 05.07.4) of the invivo data 
+% stored in "../Raw_Data/gatorNL/".
 % Additionally, the script calculates the three plots for one "bad" unit
 % of the same data set, namely gatorNL 10.07.11, which is used in Fig 4A-C.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,17 +25,17 @@ path_data = "../Raw_Data/gatorNL/";
 cutoff = 15;  % in [ms]
 
 %% Some Preprocessing and Data Analysis - good example unit
-filename_good = "05.13.3.spikes.mat";
+filename_good = "05.07.4.spikes.mat";  % ARO: "05.13.3.spikes.mat";  
 data_good = load(path_data + filename_good); 
 spt_raw = data_good.spikes;
 depvar = data_good.depvar;
-durat = data_good.durat;  % stimulus duration
-delay = data_good.delay;  % start of stimulation
+durat1 = data_good.durat;  % stimulus duration
+delay1 = data_good.delay;  % start of stimulation
 Nrep_good = numel(spt_raw);  % number of repetitions
 
 % truncation window 
-T1_good = delay + cutoff;  % start of stimulation [ms]
-T2_good = delay + durat;  % end of stimulation [ms]
+T1_good = delay1 + cutoff;  % start of stimulation [ms]
+T2_good = delay1 + durat1;  % end of stimulation [ms]
 
 % refractory window for rejecting double spikes
 trefract = 0.5;   
@@ -73,7 +73,7 @@ spt_stim_good = spt_good(depvar ~= -6666);
 %% Raster Plot - good example unit
 f1 = figure(1);
 for k = 1:51  % don't use numel(spt_stim_good)
-    plot(spt_stim_good{k} - delay, k*ones(1,length(spt_stim_good{k})), ...
+    plot(spt_stim_good{k} - delay1, k*ones(1,length(spt_stim_good{k})), ...
         '.k', 'MarkerSize', 5)
     hold on
 end
@@ -81,8 +81,11 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([-10, 120])  % show trials from -10ms to 120ms
+xlim([-5, 45])  % Frontiers
+% xlim([-10, 120])  % ARO: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+
+f1.Position = [100 100 540 400];  % set the figure size
 
 %% Some Preprocessing and Data Analysis - bad example unit
 filename_bad = "10.07.11.spikes.mat";
@@ -141,8 +144,11 @@ hold off
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - Gator NL %s', filename_bad))
-xlim([-10, 120])  % show trials from -10ms to 120ms
+xlim([-5, 45])  % manuscript version
+% xlim([-10, 120])  % ARO version: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+
+f2.Position = [100 100 540 400];  % set the figure size
 
 %% Period Histogram - good example
 NB = 51;
@@ -160,7 +166,10 @@ title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_good, VS_good, FQ_good))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 165])
+ylim([0 100])
+% ARO: ylim([0 165])
+
+f3.Position = [100 100 540 400];  % set the figure size
 
 %% Period Histogram - bad example
 NB = 51;  % should match NB above
@@ -180,6 +189,8 @@ xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
 ylim([0 60])
 
+f4.Position = [100 100 540 400];  % set the figure size
+
 %% SAC curve - good example
 BW = 0.05;  % coincidence window in [ms]
 TL = 6;  % max histogram bin
@@ -193,7 +204,10 @@ title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, ...
     VS_good, CI_good))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 4.5])
+ylim([0 3])
+% ARO: ylim([0 4.5])
+
+f5.Position = [100 100 540 400];  % set the figure size
 
 %% SAC curve - bad example
 BW = 0.05;  % coincidence window in [ms]
@@ -208,6 +222,8 @@ title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, ...
     VS_bad, CI_bad))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 4.5])
+ylim([0 4])
+% ylim([0 4.5])  % ARO poster version 
 xlim([-9 9])
 
+f6.Position = [100 100 540 400];  % set the figure size
