@@ -83,6 +83,7 @@ SAC_Ashida_folder = cell(n_folders, 1);
 SACtv_Ashida_folder = cell(n_folders, 1); 
 CI_Ashida_folder = cell(n_folders, 1); 
 Nsp_Ashida_folder = cell(n_folders, 1); 
+CN_Ashida_folder = cell(n_folders, 1); 
 
 % init - Joris
 H_Joris_folder = cell(n_folders, 1);
@@ -90,10 +91,13 @@ BC_Joris_folder = cell(n_folders, 1);
 N_Joris_folder = cell(n_folders, 1);
 CI_Joris_folder = cell(n_folders, 1);
 
+D = [];  % init duration
+M = [];  % init number of trials 
+r = [];  % init spike rate
 for folder = 1:n_folders
     % data in current folder
     data_folder = getfield(spike_data, folders{folder});
-    
+        
     % number of sessions
     n_sessions = size(data_folder, 1);  
     
@@ -102,6 +106,7 @@ for folder = 1:n_folders
     SACtv_Ashida_session = cell(n_sessions, 1); % Bin centers for SAC
     CI_Ashida_session = cell(n_sessions, 1);    % CI values
     Nsp_Ashida_session = cell(n_sessions, 1);   % number of spikes
+    CN_Ashida_session = cell(n_sessions, 1);    % normalization factor 
     
     % init - Joris
     H_Joris_session = cell(n_sessions, 1);      % SAC values
@@ -112,12 +117,15 @@ for folder = 1:n_folders
     for session = 1:n_sessions
         % spike trains of current session
         SPin = data_folder{session, 1};
+        M(end+1) = length(SPin);
         
         % stimulus specifics of current session
         freq = data_folder{session, 3};
         durat = data_folder{session, 5};
         delay = data_folder{session, 6};
         cutoff = data_folder{session, 7};
+        D(end+1) = durat - cutoff;
+        r(end+1) = data_folder{session, 8};
         
         % starting and ending time of stimulus
         T1 = delay + cutoff;  % starting time [ms] for the analysis 
@@ -128,8 +136,8 @@ for folder = 1:n_folders
         
         % Ashida's function
         [SAC_Ashida_session{session}, SACtv_Ashida_session{session}, ...
-            CI_Ashida_session{session}, ~, Nsp_Ashida_session{session}] = ...
-            calcSAC(SPin, BW, T1, T2, TL);
+            CI_Ashida_session{session}, CN_Ashida_session{session}, ...
+            Nsp_Ashida_session{session}] = calcSAC(SPin, BW, T1, T2, TL);
         
         % before feeding the spike trains to Joris' function, we need to
         % truncate the spike trains from T1 to T2.
@@ -153,6 +161,7 @@ for folder = 1:n_folders
     SACtv_Ashida_folder{folder} = SACtv_Ashida_session; 
     CI_Ashida_folder{folder} = CI_Ashida_session;
     Nsp_Ashida_folder{folder} = Nsp_Ashida_session;  
+    CN_Ashida_folder{folder} = CN_Ashida_session;  
     
     % folder results Joris
     H_Joris_folder{folder} = H_Joris_session;
@@ -166,19 +175,21 @@ end
 % plot the CI values against each other (they should form a perfect line)
 
 figure()
+xx = cell(n_folders,1);  % init
+yy = cell(n_folders,1);  % init
 for folder_nr = 1:n_folders
     
     subplot(3,2,folder_nr)
     
     % define x and y values
-    xx = cell2mat(CI_Joris_folder{folder_nr});
-    yy = cell2mat(CI_Ashida_folder{folder_nr});
+    xx{folder_nr} = cell2mat(CI_Joris_folder{folder_nr});
+    yy{folder_nr} = cell2mat(CI_Ashida_folder{folder_nr});
     
     % plotting
-    plot(xx, yy, 'b+')
+    plot(xx{folder_nr}, yy{folder_nr}, 'b+')
     hold on
-    ref_low = min([xx, yy]); 
-    ref_high = max([xx, yy]);
+    ref_low = min([xx{folder_nr}, yy{folder_nr}]); 
+    ref_high = max([xx{folder_nr}, yy{folder_nr}]);
     plot([ref_low, ref_high], [ref_low, ref_high],'k-')
     hold off
     
@@ -190,6 +201,38 @@ for folder_nr = 1:n_folders
 end
 suptitle("Comparison of CI values")
 
+allJoris = cat(1,xx{:});  % one vector with data from all 5 folders
+allAshida = cat(1,yy{:});  % one vector with data from all 5 folders
+
+figure()
+plot(allJoris, allAshida, 'b+')
+hold on
+plot([0, 12], [0, 12], 'k-')
+title("All data points")
+xlabel("Joris")
+ylabel("Ashida")
+
+%% Error histogram CI
+diff_CI = allAshida - allJoris;
+figure();
+histogram(diff_CI,11)
+title("Error histogram CI")
+xlabel("Ashida - Joris")
+ylabel("counts")
+
+% calculate the Louage norm
+NormFact_Kessler = M.*(M-1).*r.*r.*BW.*D./1000./1000;  % all units in [ms]
+NormFact_Ashida = cell2mat(cat(1,CN_Ashida_folder{:}));
+
+dCoin = diff_CI.*NormFact_Ashida;
+figure()
+plot(dCoin, 'o')  % difference in coincidence detection
+xlabel("unit nr")
+ylabel("\Delta Nsp")
+
+totSPN = cell2mat(cat(1,Nsp_Ashida_folder{:}));
+totSPN(61)
+
 %% 3.2 Results (with plots)
 % plot the SACs of a defined dataset in one figure and look for overlap
 figure()
@@ -199,7 +242,7 @@ plot(BC_Joris_folder{folder_nr}{session_nr}, ...
     H_Joris_folder{folder_nr}{session_nr}, 'b')
 hold on
 plot(SACtv_Ashida_folder{folder_nr}{session_nr}, ...
-    SAC_Ashida_folder{folder_nr}{session_nr}, 'r')
+    SAC_Ashida_folder{folder_nr}{session_nr}, 'r--')
 hold off
 % plotting cosmetics
 legend("Joris", "Ashida")
@@ -219,19 +262,19 @@ for folder_nr = 1:n_folders
     
     % Joris
     Nsess = length(N_Joris_folder{folder_nr});
-    xx = zeros(Nsess, 1);
+    xxNsp = zeros(Nsess, 1);
     for s = 1:Nsess
-        xx(s) = N_Joris_folder{folder_nr}{s}.Nspike1;
+        xxNsp(s) = N_Joris_folder{folder_nr}{s}.Nspike1;
     end
     
     % Ashida
     yy = cell2mat(Nsp_Ashida_folder{folder_nr});
     
     % plotting
-    plot(xx, yy, 'b+')
+    plot(xxNsp, yy, 'b+')
     hold on
-    ref_low = min([xx, yy]); 
-    ref_high = max([xx, yy]);
+    ref_low = min([xxNsp, yy]); 
+    ref_high = max([xxNsp, yy]);
     plot([ref_low, ref_high], [ref_low, ref_high],'k-')
     hold off
     
