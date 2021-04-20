@@ -88,7 +88,7 @@ ylim([0, 52])  % 51 (same number as in bad example raster)
 f1.Position = [100 100 540 400];  % set the figure size
 
 %% Some Preprocessing and Data Analysis - bad example unit
-filename_bad = "10.07.11.spikes.mat";
+filename_bad = "14.02.4.spikes.mat" ;  % "10.07.11.spikes.mat";
 data_bad = load(path_data + filename_bad); 
 spt_raw = data_bad.spikes;
 depvar = data_bad.depvar;
@@ -147,7 +147,6 @@ title(sprintf('Raster Plot - Gator NL %s', filename_bad))
 xlim([-5, 45])  % manuscript version
 % xlim([-10, 120])  % ARO version: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
-
 f2.Position = [100 100 540 400];  % set the figure size
 
 %% Period Histogram - good example
@@ -187,8 +186,8 @@ title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
         filename_bad, VS_bad, FQ_bad))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 60])
-
+ylim([0 100])  % for 14.02.4 unit
+% ylim([0 60])  % for 10.07.11 unit
 f4.Position = [100 100 540 400];  % set the figure size
 
 %% SAC curve - good example
@@ -206,7 +205,6 @@ xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 3])
 % ARO: ylim([0 4.5])
-
 f5.Position = [100 100 540 400];  % set the figure size
 
 %% SAC curve - bad example
@@ -222,8 +220,8 @@ title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_bad, ...
     VS_bad, CI_bad))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 4])
+ylim([0 5.5])  % for 14.02.4 unit
+% ylim([0 4])  % for 10.07.11 unit
 % ylim([0 4.5])  % ARO poster version 
 xlim([-9 9])
-
 f6.Position = [100 100 540 400];  % set the figure size
