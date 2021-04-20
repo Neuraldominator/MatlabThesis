@@ -45,8 +45,10 @@ end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin031, Nsp031))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-10, 120])  % show trials from 0ms to 120ms
+xlim([-5 45])  % manuscript
+% xlim([-10, 120])  % ARO: show trials from 0ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+f1.Position = [100 100 540 400];  % set the figure size
 
 % 2nd raster plot VSin=0.61
 f2 = figure(2);
@@ -59,8 +61,10 @@ end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin061, Nsp061))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-10, 120])  % show trials from 0ms to 120ms
+xlim([-5 45])  % manuscript
+% xlim([-10, 120])  % show trials from 0ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+f2.Position = [100 100 540 400];  % set the figure size
 
 % 3rd raster plot VSin=0.91
 f3 = figure(3);
@@ -73,8 +77,10 @@ end
 title(sprintf("Raster plot - simulated data VS=%.2f, Nsp=%.0f", VSin091, Nsp091))
 xlabel("time (ms)")
 ylabel("reps")
-xlim([-10, 120])  % show trials from 0ms to 120ms
+xlim([-5 45])  % manuscript
+% xlim([-10, 120])  % show trials from 0ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+f3.Position = [100 100 540 400];  % set the figure size
 
 %% panel B: Phase histograms corresponding to the rasters in panel A
 % add path of source code provided by Go Ashida
@@ -109,6 +115,7 @@ xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
 ylim([0 1800])
+f4.Position = [100 100 540 400];  % set the figure size
 
 % phase histogram for VSin=0.61
 [PH061, PHtv061, VS061] = calcPhaseHist(spt061,T1,T2,NB,FQ);
@@ -129,6 +136,7 @@ xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
 ylim([0 1800])
+f5.Position = [100 100 540 400];  % set the figure size
 
 % phase histogram for VSin=0.91
 [PH091, PHtv091, VS091] = calcPhaseHist(spt091,T1,T2,NB,FQ);
@@ -149,6 +157,7 @@ xlabel("phase (cycle)")
 ylabel("spike rate (Hz)")
 xlim([-0.5 0.5])
 ylim([0 1800])
+f6.Position = [100 100 540 400];  % set the figure size
 
 %% panel C: VS-kappa curve
 kappa = 0:0.1:11;
@@ -184,6 +193,7 @@ title(sprintf("SAC - simulated data VSin=%.2f, CI=%.2f, Nsp=%.0f", ...
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
+f8.Position = [100 100 540 400];  % set the figure size
 
 % phase histogram for VSin=0.61
 [SAC061, SACtv061, CI061, ~, Nsp061] = calcSAC(spt061, BW, T1, T2, TL);
@@ -194,6 +204,7 @@ title(sprintf("SAC - simulated data VSin=%.2f, CI=%.2f, Nsp=%.0f", ...
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
+f9.Position = [100 100 540 400];  % set the figure size
 
 % phase histogram for VSin=0.91
 [SAC091, SACtv091, CI091, ~, Nsp091] = calcSAC(spt091, BW, T1, T2, TL);
@@ -204,6 +215,7 @@ title(sprintf("SAC - simulated data VSin=%.2f, CI=%.2f, Nsp=%.0f", ...
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
 ylim([0 4.5])
+f10.Position = [100 100 540 400];  % set the figure size
 
 %% panel E: CI-kappa curve
 kappa = 0:0.1:11;
