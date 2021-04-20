@@ -9,7 +9,7 @@
 
 %% Load the data files
 path1 = "../Source_Code/ANmodel/GBCdata/";
-filename1 = "GBC200Hz40dB";
+filename1 = "GBC200Hz40dB";  % "GBC200Hz70dB"
 path2 = "../Source_Code/ANmodel/ANdata/ANdata0/";
 filename2 = "AN200Hz70dB";
 GBC = load(path1 + filename1 + "4SAC.mat");
@@ -53,8 +53,10 @@ end
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - %s', filename1))
-xlim([-10, 120])  % show trials from -10ms to 120ms
+xlim([-5 45])  % manuscript
+% xlim([-10, 120])  % ARO: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+f1.Position = [100 100 540 400];  % set the figure size
 
 %% panel G: Raster plot AN
 % convert binary spikes into spike times with temp. resolution dt=0.01
@@ -72,8 +74,10 @@ end
 xlabel('time (ms)')
 ylabel('repetition')
 title(sprintf('Raster Plot - %s', filename2))
-xlim([-10, 120])  % show trials from -10ms to 120ms
+xlim([-5 45])  % manuscript
+% xlim([-10, 120])  % ARO: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
+f2.Position = [100 100 540 400];  % set the figure size
 
 %% panel E: Phase Histogram GBC
 FQ = 200;  % stimulation frequency [Hz]
@@ -98,9 +102,11 @@ ylabel("spike rate [Hz]")
 if NB==51
    ylim([0 1600])  % for NB=51
 elseif NB==41
-   ylim([0 1800])  % for NB=41
+   % ylim([0 5500])  % for 70dB: 5500 
+   ylim([0 2000])  % for 40dB: 2000
 end
 xlim([-0.5 0.5])
+f3.Position = [100 100 540 400];  % set the figure size
 
 %% panel H: Phase Histogram AN
 FQ = 200;  % stimulation frequency [Hz]
@@ -127,6 +133,7 @@ elseif NB==41
    ylim([0 1800])  % for NB=41
 end
 xlim([-0.5 0.5])
+f4.Position = [100 100 540 400];  % set the figure size
 
 %% panel F: SAC GBC
 [SAC_GBC, SACtv_GBC, CI_GBC, ~, ~] = calcSAC(sptGBC, BW, T1, T2, TL);
@@ -138,9 +145,10 @@ plot(SACtv_GBC, SAC_GBC, '-k')
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename1, VS_GBC, CI_GBC))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 4.5])
+% ylim([0 11])  % for 70dB: 11
+ylim([0 4.5])  % for 40dB: 4.5
 xlim([-9 9])
-
+f5.Position = [100 100 540 400];  % set the figure size
 
 %% panel I: SAC AN
 [SAC_AN, SACtv_AN, CI_AN, ~, ~] = calcSAC(sptAN, BW, T1, T2, TL);
@@ -152,5 +160,6 @@ plot(SACtv_AN, SAC_AN, '-k')
 title(sprintf("SAC - %s, VS=%.2f, CI=%.2f", filename2, VS_AN, CI_AN))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 4.5])
+ylim([0 4.5]) 
 xlim([-9 9])
+f6.Position = [100 100 540 400];  % set the figure size
