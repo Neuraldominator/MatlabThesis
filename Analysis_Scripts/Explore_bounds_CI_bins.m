@@ -1,6 +1,6 @@
 %% plot errors
 k = 1:7;
-f = [300,600,1200,2400];  % Hz
+f = [200,400,800,1400];  % Hz
 N = 100;  % number of summands used
 w = 0.001:0.01:0.6;  % bin width [ms]
 
@@ -15,7 +15,65 @@ for m = 1:length(f)
   end
 end
 
+%% plot normalized
 figure(1)
+subplot(2,2,1)
+col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
+for j = 1:length(k)
+  plot(w, reshape(ci_bins(1,j,:),1,[]) ./ ci_plain(j),'o-','color',col{j})
+  hold on 
+end
+xlabel('bin width [ms]')
+ylabel('CI')
+title(sprintf('f=%d Hz',f(1)))
+
+subplot(2,2,2)
+col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
+for j = 1:length(k)
+  plot(w, reshape(ci_bins(2,j,:),1,[]) ./ ci_plain(j),'o-','color',col{j})
+  hold on 
+end
+xlabel('bin width [ms]')
+ylabel('CI')
+title(sprintf('f=%d Hz',f(2)))
+
+subplot(2,2,3)
+col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
+for j = 1:length(k)
+  plot(w, reshape(ci_bins(3,j,:),1,[]) ./ ci_plain(j),'o-','color',col{j})
+  hold on 
+end
+xlabel('bin width [ms]')
+ylabel('CI')
+title(sprintf('f=%d Hz',f(3)))
+
+subplot(2,2,4)
+col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
+for j = 1:length(k)
+  plot(w, reshape(ci_bins(4,j,:),1,[]) ./ ci_plain(j),'o-','color',col{j})
+  hold on 
+end
+xlabel('bin width [ms]')
+ylabel('CI')
+title(sprintf('f=%d Hz',f(4)))
+
+%% Compute the relative error
+idx_vec = zeros(length(f),length(k));
+for m = 1:length(f)
+  for j = 1:length(k) 
+    error_vec = (ci_plain(j) - reshape(ci_bins(m,j,:),1,[])) ./ ci_plain(j);
+    idx = find(error_vec > 0.05,1,'first');
+    if ~isempty(idx)
+      idx_vec(m,j) = idx;
+    else
+      idx_vec(m,j) = 0;
+    end
+  end
+end
+
+
+%% plot unnormalized
+figure(2)
 subplot(2,2,1)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
 for j = 1:length(k)
