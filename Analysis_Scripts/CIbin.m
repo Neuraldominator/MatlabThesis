@@ -1,4 +1,12 @@
 function R = CIbin(k,w,f,N)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% input: k  -  concentration parameter vM
+%        w  -  bin width [ms]
+%        f  -  frequency [Hz]
+%        N  -  number of summands
+% 
+% output: R  -  CI value
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 r = zeros(1,N+1);
 r(1) = 1;
