@@ -126,3 +126,77 @@ legend('bin (k=1)','k=1','bin (k=2)','k=2','bin (k=3)','k=3',...
     'bin (k=4)','k=4','bin (k=5)','k=5','bin (k=6)','k=6',...
     'bin (k=7)','k=7', 'Location', 'eastoutside')
 title(sprintf('f=%d Hz, T=%.2f ms',f(4),1000/f(4)))
+
+%% max VS approach
+F = logspace(2,4,55);  % frequencies [Hz]
+F = F(1:end-5);
+NF = length(F);
+
+w = 0.01:0.01:0.15;
+NW = length(w);
+
+% calculate max VS from the frequencies
+VSf_fun = @(f) min([0.9860, 0.91 / (1+exp((f-3500)/900)) + 0.15 / (1+exp((f-1000)/900))]);
+
+VS = zeros(1, NF);
+Kappa = zeros(1, NF);
+CIbins = zeros(NW, NF);
+CItheo = zeros(1, NF);
+Error =  zeros(NW, NF);
+for k = 1:NF
+  % get the corresponding VS values from F
+  VS(k) = VSf_fun(F(k));
+  
+  % estimate kappa from VS
+  VSk_fun = @(x) besseli(1,x) ./ besseli(0,x) - VS(k);
+  Kappa(k) = fsolve(VSk_fun, 1.0, optimset('Display','off', 'TolFun',1e-8)); 
+    
+  % get CI from binning
+  CItheo(k) = besseli(0,2*Kappa(k)) ./ besseli(0,Kappa(k))^2;
+  
+  for j = 1:NW
+    CIbins(j,k) = CIbin(Kappa(k), w(j), F(k), 10);
+    Error(j,k) = (CItheo(k) - CIbins(j,k)) ./ CItheo(k);
+  end  
+
+end
+
+%% Error against kappa (iso-winwidth)
+figure
+for j = 1:NW
+  if mod(j,3) == 0
+  plot(Kappa,Error(j,:),'o-')
+  hold on
+  end
+end
+xlabel("Kappa")
+ylabel("Relative Error")
+legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms','Location','best')
+
+%% Error against frequency (iso-winwidth)
+figure
+for j = 1:NW
+  if mod(j,3) == 0
+  plot(F,Error(j,:),'o-')
+  hold on
+  end
+end
+plot(F,Error(5,:),'o-')
+xlabel("Frequency (Hz)")
+ylabel("Relative Error")
+legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms','w=0.05ms','Location','best')
+
+
+%% Error against bin width (iso-kappa)
+figure 
+for k = 1:NF
+  if mod(k,10) == 0
+    sprintf('k=%d',k)
+    plot(w,Error(:,k),'o-')
+    hold on
+  end
+end
+xlabel("bin width (ms)")
+ylabel("Relative Error")
+legend('k=34.5096','k=19.0305','k=6.0189','k=1.7176','k=0.0615',...
+    'Location','best')
