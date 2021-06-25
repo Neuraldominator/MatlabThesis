@@ -5,7 +5,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 1. Load the generated data
-load("..\Gen_Data\Raw_GenData\gen_data.mat");
+%load("..\Gen_Data\Raw_GenData\gen_data.mat");
+%load("..\Gen_Data\Raw_GenData\gen_data60.mat");
+load("..\Gen_Data\Raw_GenData\gen_data500.mat");
 
 pwd
 %% 2. Add path of source code for VS and CI computation
@@ -15,7 +17,8 @@ addpath("..\Source_Code\Ashida_2020_code\invivo");
 
 %% 3. Calculate VS and CIgen_data
 % number of cells for loop over
-N = size(gen_data.dec6_2020, 1);
+%N = size(gen_data.dec6_2020, 1);
+N = size(gen_data.jun21_2021, 1);
 
 % set parameters for the "VS and CI computation" functions
 NB = 41;  % number of bins for phase histogram (irrelevant for VS calc.)
@@ -25,16 +28,21 @@ BW = 0.05; % coincidence window [ms]
 VS = zeros(N, 1);
 CI = zeros(N, 1);
 for k = 1:N
-  SPin = gen_data.dec6_2020{k, 1};  % spike train
-  FQ = gen_data.dec6_2020{k, 3};  % freq
+  %SPin = gen_data.dec6_2020{k, 1};  % spike train
+  %FQ = gen_data.dec6_2020{k, 3};  % freq
+  SPin = gen_data.jun21_2021{k, 1};  % spike train
+  FQ = gen_data.jun21_2021{k, 3};  % freq
   
   % start and end of analysis window
-  T1 = gen_data.dec6_2020{k, 6} + gen_data.dec6_2020{k, 7};  % delay + cutoff
-  T2 = gen_data.dec6_2020{k, 6} + gen_data.dec6_2020{k, 5};  % delay + durat
-    
+  %T1 = gen_data.dec6_2020{k, 6} + gen_data.dec6_2020{k, 7};  % delay + cutoff
+  %T2 = gen_data.dec6_2020{k, 6} + gen_data.dec6_2020{k, 5};  % delay + durat
+  T1 = gen_data.jun21_2021{k, 6} + gen_data.jun21_2021{k, 7};  % delay + cutoff
+  T2 = gen_data.jun21_2021{k, 6} + gen_data.jun21_2021{k, 5};  % delay + durat
+     
   [~, ~, VS(k)] = calcPhaseHist(SPin, T1, T2, NB, FQ);
   
-  TL = gen_data.dec6_2020{k, 5}/5 * (1000/FQ);  % max binwidth (irrelevant for CI calc.)
+  %TL = gen_data.dec6_2020{k, 5}/5 * (1000/FQ);  % max binwidth (irrelevant for CI calc.)
+  TL = gen_data.jun21_2021{k, 5}/5 * (1000/FQ);  % max binwidth (irrelevant for CI calc.)
   [~, ~, CI(k), ~, ~] = calcSAC(SPin, BW, T1, T2, TL);
 end
 
@@ -61,7 +69,8 @@ set(f1,'Position',[360 198 726 350])
 %% compare VSin with empirical VS values 
 
 for k=1:N
-    VSin(k) = gen_data.dec6_2020{k, 10};
+    %VSin(k) = gen_data.dec6_2020{k, 10};    
+    VSin(k) = gen_data.jun21_2021{k, 10};
 end
 
 % mean squared error
