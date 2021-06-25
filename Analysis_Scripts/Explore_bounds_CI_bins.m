@@ -1,3 +1,10 @@
+%% Explore the relative error in the calculation of CI through binning.
+% Here, the three parameters kappa, frequency, and bin width are tested
+% through a slice-and-dice approach. The relavant parameter combinations
+% are limimted by the relation between VS and frequency (or kappa and
+% frequency). Therefore, a phenomenological curve was crafted describing
+% the maximum VS value dependent on f (Hz). 
+
 %% plot errors
 k = 1:7;
 f = [200,400,800,1400];  % Hz
@@ -16,7 +23,7 @@ for m = 1:length(f)
 end
 
 %% plot normalized
-figure(1)
+f1 = figure(1);
 subplot(2,2,1)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
 for j = 1:length(k)
@@ -56,6 +63,11 @@ end
 xlabel('bin width [ms]')
 ylabel('CI')
 title(sprintf('f=%d Hz',f(4)))
+f1.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca,'linewidth',1);
+set(gca, 'fontsize', 12);
 
 %% Compute the relative error
 idx_vec = zeros(length(f),length(k));
@@ -71,9 +83,8 @@ for m = 1:length(f)
   end
 end
 
-
 %% plot unnormalized
-figure(2)
+f2 = figure(2);
 subplot(2,2,1)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
 for j = 1:length(k)
@@ -126,10 +137,16 @@ legend('bin (k=1)','k=1','bin (k=2)','k=2','bin (k=3)','k=3',...
     'bin (k=4)','k=4','bin (k=5)','k=5','bin (k=6)','k=6',...
     'bin (k=7)','k=7', 'Location', 'eastoutside')
 title(sprintf('f=%d Hz, T=%.2f ms',f(4),1000/f(4)))
+f2.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca,'linewidth',1);
+set(gca, 'fontsize', 12);
 
 %% max VS approach
-F = logspace(2,4,55);  % frequencies [Hz]
-F = F(1:end-5);
+F = 200:100:5000;
+%F = logspace(2,4,55);  % frequencies [Hz]
+%F = F(1:end-5);
 NF = length(F);
 
 w = 0.01:0.01:0.15;
@@ -155,48 +172,73 @@ for k = 1:NF
   CItheo(k) = besseli(0,2*Kappa(k)) ./ besseli(0,Kappa(k))^2;
   
   for j = 1:NW
-    CIbins(j,k) = CIbin(Kappa(k), w(j), F(k), 10);
+    CIbins(j,k) = CIbin(Kappa(k), w(j), F(k), 100);
     Error(j,k) = (CItheo(k) - CIbins(j,k)) ./ CItheo(k);
   end  
 
 end
 
 %% Error against kappa (iso-winwidth)
-figure
+f3 = figure(3);
 for j = 1:NW
-  if mod(j,3) == 0
+  if mod(j,3) == 0 || mod(j,5) == 0
   plot(Kappa,Error(j,:),'o-')
   hold on
   end
 end
 xlabel("Kappa")
 ylabel("Relative Error")
-legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms','Location','best')
+xlim([0, 36])
+legend("w="+string(w(3)),"w="+string(w(5)),"w="+string(w(6)),...
+    "w="+string(w(9)),"w="+string(w(10)),"w="+string(w(12)),...
+    "w="+string(w(15)), 'Location','best')
+%legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms','Location','best')
+f3.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca,'linewidth',1);
+set(gca, 'fontsize', 12);
 
 %% Error against frequency (iso-winwidth)
-figure
+f4 = figure(4);
 for j = 1:NW
-  if mod(j,3) == 0
-  plot(F,Error(j,:),'o-')
+  if mod(j,3) == 0 || mod(j,5) == 0
+  semilogx(F,Error(j,:),'o-')
   hold on
   end
 end
-plot(F,Error(5,:),'o-')
+%plot(F,Error(5,:),'o-')
 xlabel("Frequency (Hz)")
 ylabel("Relative Error")
-legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms','w=0.05ms','Location','best')
-
+xlim([100, 5000])
+legend("w="+string(w(3)),"w="+string(w(5)),"w="+string(w(6)),...
+    "w="+string(w(9)),"w="+string(w(10)),"w="+string(w(12)),...
+    "w="+string(w(15)), 'Location','best')
+%legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms',...
+%    'w=0.05ms','Location','best')
+f4.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca,'linewidth',1);
+set(gca, 'fontsize', 12);
 
 %% Error against bin width (iso-kappa)
-figure 
+f5 = figure(5);
 for k = 1:NF
-  if mod(k,10) == 0
-    sprintf('k=%d',k)
-    plot(w,Error(:,k),'o-')
+  if mod(k,7) == 0
+    %sprintf('k=%d',k)
+    plot(w, Error(:,k), 'o-')
     hold on
   end
 end
 xlabel("bin width (ms)")
 ylabel("Relative Error")
-legend('k=34.5096','k=19.0305','k=6.0189','k=1.7176','k=0.0615',...
-    'Location','best')
+legend("K="+string(round(Kappa(7),2)),"K="+string(round(Kappa(14),2)),...
+    "K="+string(round(Kappa(21),2)),"K="+string(round(Kappa(28),2)),...
+    "K="+string(round(Kappa(35),2)),"K="+string(round(Kappa(42),2)),...
+    "K="+string(round(Kappa(49),2)), 'Location','best')
+f5.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca,'linewidth',1);
+set(gca, 'fontsize', 12);
