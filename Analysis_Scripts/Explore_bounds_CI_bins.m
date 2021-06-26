@@ -32,7 +32,15 @@ for j = 1:length(k)
 end
 xlabel('bin width [ms]')
 ylabel('CI')
+ylim([0.2 1])
 title(sprintf('f=%d Hz',f(1)))
+legend('bin (k=1)','bin (k=2)','bin (k=3)','bin (k=4)','bin (k=5)',...
+    'bin (k=6)','bin (k=7)', 'Location', 'southwest')
+f1.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca, 'linewidth', 1);
+set(gca, 'fontsize', 12);
 
 subplot(2,2,2)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
@@ -42,7 +50,15 @@ for j = 1:length(k)
 end
 xlabel('bin width [ms]')
 ylabel('CI')
+ylim([0.2 1])
 title(sprintf('f=%d Hz',f(2)))
+legend('bin (k=1)','bin (k=2)','bin (k=3)','bin (k=4)','bin (k=5)',...
+    'bin (k=6)','bin (k=7)', 'Location', 'southwest')
+f1.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca, 'linewidth', 1);
+set(gca, 'fontsize', 12);
 
 subplot(2,2,3)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
@@ -52,7 +68,15 @@ for j = 1:length(k)
 end
 xlabel('bin width [ms]')
 ylabel('CI')
+ylim([0.2 1])
 title(sprintf('f=%d Hz',f(3)))
+legend('bin (k=1)','bin (k=2)','bin (k=3)','bin (k=4)','bin (k=5)',...
+    'bin (k=6)','bin (k=7)', 'Location', 'southwest')
+f1.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca, 'linewidth', 1);
+set(gca, 'fontsize', 12);
 
 subplot(2,2,4)
 col = {[0 0 1],[1 0 0],[0 1 0],[0 1 1],[1 1 0],[1 0 1],[0.5 0.5 0.5]};
@@ -62,11 +86,14 @@ for j = 1:length(k)
 end
 xlabel('bin width [ms]')
 ylabel('CI')
+ylim([0.2 1])
 title(sprintf('f=%d Hz',f(4)))
+legend('bin (k=1)','bin (k=2)','bin (k=3)','bin (k=4)','bin (k=5)',...
+    'bin (k=6)','bin (k=7)', 'Location', 'southwest')
 f1.Position = [100 100 540 400];  % set the figure size
 set(gca,'TickDir','out');
 box off
-set(gca,'linewidth',1);
+set(gca, 'linewidth', 1);
 set(gca, 'fontsize', 12);
 
 %% Compute the relative error
@@ -138,9 +165,9 @@ legend('bin (k=1)','k=1','bin (k=2)','k=2','bin (k=3)','k=3',...
     'bin (k=7)','k=7', 'Location', 'eastoutside')
 title(sprintf('f=%d Hz, T=%.2f ms',f(4),1000/f(4)))
 f2.Position = [100 100 540 400];  % set the figure size
-set(gca,'TickDir','out');
+set(gca, 'TickDir', 'out');
 box off
-set(gca,'linewidth',1);
+set(gca, 'linewidth', 1);
 set(gca, 'fontsize', 12);
 
 %% max VS approach
@@ -161,10 +188,10 @@ CIbins = zeros(NW, NF);
 CItheo = zeros(1, NF);
 Error =  zeros(NW, NF);
 for k = 1:NF
-  % get the corresponding VS values from F
+  % get the corresponding max VS values from F
   VS(k) = VSf_fun(F(k));
   
-  % estimate kappa from VS
+  % estimate max kappa from max VS
   VSk_fun = @(x) besseli(1,x) ./ besseli(0,x) - VS(k);
   Kappa(k) = fsolve(VSk_fun, 1.0, optimset('Display','off', 'TolFun',1e-8)); 
     
@@ -233,12 +260,40 @@ for k = 1:NF
 end
 xlabel("bin width (ms)")
 ylabel("Relative Error")
-legend("K="+string(round(Kappa(7),2)),"K="+string(round(Kappa(14),2)),...
-    "K="+string(round(Kappa(21),2)),"K="+string(round(Kappa(28),2)),...
-    "K="+string(round(Kappa(35),2)),"K="+string(round(Kappa(42),2)),...
-    "K="+string(round(Kappa(49),2)), 'Location','best')
+%legend("K="+string(round(Kappa(7),2)),"K="+string(round(Kappa(14),2)),...
+%    "K="+string(round(Kappa(21),2)),"K="+string(round(Kappa(28),2)),...
+%    "K="+string(round(Kappa(35),2)),"K="+string(round(Kappa(42),2)),...
+%    "K="+string(round(Kappa(49),2)), 'Location','best')
+legend("T="+string(round(1e3/F(7),3)),"T="+string(round(1e3/F(14),3)),...
+    "T="+string(round(1e3/F(21),3)),"T="+string(round(1e3/F(28),3)),...
+    "T="+string(round(1e3/F(35),3)),"T="+string(round(1e3/F(42),3)),...
+    "T="+string(round(1e3/F(49),3)), 'Location','best')
 f5.Position = [100 100 540 400];  % set the figure size
+set(gca,'TickDir','out');
+box off
+set(gca, 'linewidth', 1);
+set(gca, 'fontsize', 12);
+
+%% Error against period length (iso-winwidth)
+f6 = figure(6);
+for j = 1:NW
+  if mod(j,3) == 0 || mod(j,5) == 0
+  plot(1e3./F,Error(j,:),'o-')
+  hold on
+  end
+end
+%plot(F,Error(5,:),'o-')
+xlabel("period length (ms)")
+ylabel("Relative Error")
+%xlim([100, 5000])
+legend("w="+string(w(3)),"w="+string(w(5)),"w="+string(w(6)),...
+    "w="+string(w(9)),"w="+string(w(10)),"w="+string(w(12)),...
+    "w="+string(w(15)), 'Location','best')
+%legend('w=0.03ms','w=0.06ms','w=0.09ms','w=0.12ms','w=0.15ms',...
+%    'w=0.05ms','Location','best')
+f6.Position = [100 100 540 400];  % set the figure size
 set(gca,'TickDir','out');
 box off
 set(gca,'linewidth',1);
 set(gca, 'fontsize', 12);
+
