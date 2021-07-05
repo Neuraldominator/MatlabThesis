@@ -180,7 +180,8 @@ w = 0.01:0.01:0.15;
 NW = length(w);
 
 % calculate max VS from the frequencies
-VSf_fun = @(f) min([0.9860, 0.91 / (1+exp((f-3500)/900)) + 0.15 / (1+exp((f-1000)/900))]);
+% VSf_fun = @(f) min([0.9860, 0.91 / (1+exp((f-3500)/900)) + 0.15 / (1+exp((f-1000)/900))]);
+VSf_fun = @(f) min([0.9860, 1 - (f/5700)^1.5]);
 
 VS = zeros(1, NF);
 Kappa = zeros(1, NF);
@@ -209,10 +210,11 @@ end
 f3 = figure(3);
 for j = 1:NW
   if mod(j,3) == 0 || mod(j,5) == 0
-  plot(Kappa,Error(j,:),'o-')
+  plot(Kappa,Error(j,:),'o-','LineWidth',1)
   hold on
   end
 end
+plot([0,max(Kappa)],ones(1,2)*0.02,'--','color',[0.4,0.4,0.4],'LineWidth',1.5)
 xlabel("Kappa")
 ylabel("Relative Error")
 xlim([0, 36])
@@ -230,10 +232,16 @@ set(gca, 'fontsize', 12);
 f4 = figure(4);
 for j = 1:NW
   if mod(j,3) == 0 || mod(j,5) == 0
-  semilogx(F,Error(j,:),'o-')
-  hold on
+    semilogx(F,Error(j,:),'o-','LineWidth',1)
+    hold on
   end
 end
+rline = refline(0,0.02);
+rline.Color = [0.4,0.4,0.4];
+rline.LineStyle = '--';
+rline.LineWidth = 1.5;
+hold off
+%plot([0,max(F)],ones(1,2)*0.02,'--','color',[0.4,0.4,0.4],'LineWidth',1.5)
 %plot(F,Error(5,:),'o-')
 xlabel("Frequency (Hz)")
 ylabel("Relative Error")
@@ -254,10 +262,11 @@ f5 = figure(5);
 for k = 1:NF
   if mod(k,7) == 0
     %sprintf('k=%d',k)
-    plot(w, Error(:,k), 'o-')
+    plot(w, Error(:,k), 'o-','LineWidth',1.5)
     hold on
   end
 end
+plot([0,max(w)],ones(1,2)*0.02,'--','color',[0.4,0.4,0.4],'LineWidth',1.5)
 xlabel("bin width (ms)")
 ylabel("Relative Error")
 %legend("K="+string(round(Kappa(7),2)),"K="+string(round(Kappa(14),2)),...
@@ -278,10 +287,11 @@ set(gca, 'fontsize', 12);
 f6 = figure(6);
 for j = 1:NW
   if mod(j,3) == 0 || mod(j,5) == 0
-  plot(1e3./F,Error(j,:),'o-')
+  plot(1e3./F,Error(j,:),'o-','LineWidth',1.5)
   hold on
   end
 end
+plot([0,max(1e3./F)],ones(1,2)*0.02,'--','color',[0.4,0.4,0.4],'LineWidth',1.5)
 %plot(F,Error(5,:),'o-')
 xlabel("period length (ms)")
 ylabel("Relative Error")
