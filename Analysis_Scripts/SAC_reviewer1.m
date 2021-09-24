@@ -1,3 +1,8 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This file is to prove the comment of reviewer 1 wrong, who suggested that
+% identical low VS trains would have a CI close to 1 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% 1. import functions
 addpath("..\Source_Code\Ashida_2020_code\invivo")
 addpath("..\Source_Code\Ashida_2020_code\decay")
