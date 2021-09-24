@@ -2,6 +2,8 @@
 % Script to test the effect of limited time length on SAC 
 % May-Oct 2020, Go Ashida (go.ashida@uni-oldenburg.de)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% edited by Dominik Kessler (24th Sept 2021)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 DT = 0.01; % [ms] time step
 T = 100; % [ms] total time length
