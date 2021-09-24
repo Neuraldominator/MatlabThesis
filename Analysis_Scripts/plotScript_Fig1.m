@@ -20,13 +20,18 @@ addpath("../Source_Code/Ashida_2020_code/invivo")
 
 % set data path
 path_data = "../Raw_Data/gatorNL/";
+path_data_gatorNM = "../Raw_Data/gatorNM/";
 
 % set cutoff
 cutoff = 15;  % in [ms]
 
+%Could you try Gator NM 11.02.2 with a time axis of [0, 30] ms (so that the 
+%temporal pattern is visible even for the relatively high 1200 Hz)? 
+
 %% Some Preprocessing and Data Analysis - good example unit
-filename_good = "05.07.4.spikes.mat";  % ARO: "05.13.3.spikes.mat";  
-data_good = load(path_data + filename_good); 
+filename_good = "11.02.2.spikes.mat"; % 1st manuscript: "05.07.4.spikes.mat" ; ARO: "05.13.3.spikes.mat";  
+
+data_good = load(path_data_gatorNM + filename_good); 
 spt_raw = data_good.spikes;
 depvar = data_good.depvar;
 durat1 = data_good.durat;  % stimulus duration
@@ -80,8 +85,8 @@ end
 hold off
 xlabel('time (ms)')
 ylabel('repetition')
-title(sprintf('Raster Plot - Gator NL %s', filename_good))
-xlim([-5, 45])  % Frontiers
+title(sprintf('Raster Plot - Gator NM %s', filename_good))
+xlim([0, 30])  % 1st manuscript: [-5, 45]
 % xlim([-10, 120])  % ARO: show trials from -10ms to 120ms
 ylim([0, 52])  % 51 (same number as in bad example raster)
 
@@ -150,7 +155,7 @@ ylim([0, 52])  % 51 (same number as in bad example raster)
 f2.Position = [100 100 540 400];  % set the figure size
 
 %% Period Histogram - good example
-NB = 51;
+NB = 52;
 FQ_good = data_good.freq;  % frequency [Hz]
 [PH_good, PHtv_good, VS_good] = calcPhaseHist(spt_stim_good, T1_good, ...
                                     T2_good, NB, FQ_good);  
@@ -161,11 +166,11 @@ f3 = figure(3);
 p3 = bar(PHtv_good, PH_good, 'histc');
 set(p3, 'FaceColor', 'k')
 set(p3, 'EdgeColor', 'k') 
-title(sprintf("Phase Histogram - Gator NL %s, VS=%.2f, FQ=%d Hz", ...
+title(sprintf("Phase Histogram - Gator NM %s, VS=%.2f, FQ=%d Hz", ...
         filename_good, VS_good, FQ_good))
 xlabel("phase (cycle)")
 ylabel("spike rate [Hz]")
-ylim([0 100])
+ylim([0 300])
 % ARO: ylim([0 165])
 
 f3.Position = [100 100 540 400];  % set the figure size
@@ -199,11 +204,12 @@ TL = 6;  % max histogram bin
 % plot
 f5 = figure(5);
 plot(SACtv_good, SAC_good, '-k')
-title(sprintf("SAC - Gator NL %s, VS=%.2f, CI=%.2f", filename_good, ...
+title(sprintf("SAC - Gator NM %s, VS=%.2f, CI=%.2f", filename_good, ...
     VS_good, CI_good))
 xlabel("delay (ms)")
 ylabel("norm. coincidences")
-ylim([0 3])
+xlim([-4 4])  % 1st Manuscript: [-6 6]
+ylim([0 3.5])
 % ARO: ylim([0 4.5])
 f5.Position = [100 100 540 400];  % set the figure size
 
