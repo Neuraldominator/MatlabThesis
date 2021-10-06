@@ -107,7 +107,11 @@ plot(SACtv_D40,SAC_D40,'g-'); % calculated SAC (D=40)
 plot(SACtv_D40,max(SACest).*SACdecay_D40,'g:'); % theo decay (D=40) 
 % factorxlim([-TL,TL]); ylim([0, max(SAC)*1.3]);
 text(-8,max(SAC_D50)*1.24,sprintf('CIthr = %.4f',CIthr));
-text(-8,max(SAC_D50)*1.16,sprintf('CIout = %.4f',CI_D50));
+text(-8,max(SAC_D50)*1.16,sprintf('CI_D_5_0 = %.4f',CI_D50));
+text(-8,max(SAC_D40)*1.1,sprintf('CI_D_4_0 = %.4f',CI_D40));
+set(gca,'TickDir','out');
+yticks([0 1 2 3])
+yticklabels({'0','1','2','3'})
 
 % subplot 2
 subplot(1,2,2); cla; hold on;
@@ -118,7 +122,11 @@ plot(SACtv_D20,SAC_D20,'g-'); % calculated SAC (D=20)
 plot(SACtv_D20,max(SACest).*SACdecay_D20,'g:'); % theo decay (D=20) 
 % factorxlim([-TL,TL]); ylim([0, max(SAC)*1.3]);
 text(-8,max(SAC_D30)*1.24,sprintf('CIthr = %.4f',CIthr));
-text(-8,max(SAC_D30)*1.16,sprintf('CIout = %.4f',CI_D30));
+text(-8,max(SAC_D30)*1.16,sprintf('CI_D_3_0 = %.4f',CI_D30));
+text(-8,max(SAC_D20)*1.1,sprintf('CI_D_2_0 = %.4f',CI_D20));
+set(gca,'TickDir','out');
+yticks([0 1 2 3])
+yticklabels({'0','1','2','3'})
 % generate PDF/PNG figs
 %print('-dpdf', '-r1200', 'decay.pdf');
 %print('-dpng', '-r300', 'decay.png');
