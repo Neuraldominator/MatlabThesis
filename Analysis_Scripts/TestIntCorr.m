@@ -1,10 +1,13 @@
-% testing internal correlation for gator NL unit
-% Oct 2021, Go Ashida
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Testing internal correlation for gator NL unit.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Oct 2021, Go Ashida (edited by Dominik Kessler, Oct'21)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 addpath("..\Source_Code\Ashida_2020_code\invivo")
 addpath("..\Source_Code\Ashida_2020_code\binwidth")
 
-% loading data & assigning spikes for non-spont trials
+%% loading data & assigning spikes for non-spont trials
 load('../Raw_Data/gatorNL/14.02.4.spikes.mat');
 Nreps = sum(depvar~=-6666); % nos-spont trials
 SPin = cell(1,Nreps); % spike timing data cell 
@@ -16,23 +19,34 @@ for c = 1:length(spikes)
  end
 end
 
-% analysis settings
+%% remove potential spike doublets
+trefract = 0.5;   % refractory window for rejecting double spikes
+sp = cell(Nreps, 1);  % init
+for n = 1:Nreps
+ Nsp = length(SPin{n});     
+ sptrev = fliplr(SPin{n});  
+ sptdummy = [max(sptrev) + trefract, sptrev(1:Nsp-1)] ;
+ sptrev = sptrev((sptdummy - sptrev) >= trefract); 
+ sp{n} = fliplr(sptrev);
+end
+
+%% analysis settings
 T1 = delay + 15; % [ms] analysis start time
 T2 = delay + durat; % [ms] analysis end time
 NB = 41; % number of bins (for phase histogram)
 BW = 0.05; % [ms] SAC bin width
 TL = 6; % [ms] maximum time delay for SAC
 
-% calcumating VS and SAC -- in vivo data
-[PH,PHtv,VS] = calcPhaseHist(SPin,T1,T2,NB,freq);
-[SAC,SACtv,CI] = calcSAC(SPin,BW,T1,T2,TL);
+%% calcumating VS and SAC -- in vivo data
+[PH,PHtv,VS] = calcPhaseHist(sp,T1,T2,NB,freq);
+[SAC,SACtv,CI] = calcSAC(sp,BW,T1,T2,TL);
 
-% calculating spike counts and rate -- in vivo data
+%% calculating spike counts and rate -- in vivo data
 Nsp = sum(PH); % total number of spikes
 Tall = Nreps * (T2-T1); % [ms] total time length 
 rate = Nsp*1000/Tall; % [spike/sec] mean rate
 
-% generating surrogate data 
+%% generating surrogate data 
 DT = 0.01; % [ms] time step
 M = Nreps; % number of trials
 F = freq; % [Hz] stimulus frequency
@@ -41,7 +55,7 @@ T = epoch; % [ms] total time length
 N = round(T/DT); % number of time steps
 tv = (0:N-1) * DT; % [ms] time vector
 
-% assigning rate vector
+%% assigning rate vector
 C = freq*epoch/1000; % total number of cycles
 dumDT = 1000/freq/NB; % [ms] time step for PH
 dumTV = (0:C*NB-1) * dumDT; % time vector for repeated PH
@@ -49,7 +63,7 @@ dumPH = repmat(PH,1,C)/mean(PH); % repeated and normalized PH
 allPH = interp1(dumTV,dumPH,tv); % interpolate with step DT
 Q = allPH * L * DT /1000; % mean spike number per step 
 
-% Generate Poissonian spikes
+%% Generate Poissonian spikes
 H = Q .* exp(-Q); 
 rmat = rand(M,N); 
 A = double( rmat < repmat(H,M,1) ); 
@@ -59,16 +73,16 @@ for c = 1:M
   SPsim{c} = tv( logical(A(c,:)) );
 end
 
-% calcumating VS and SAC -- in vivo data
+%% calcumating VS and SAC -- in vivo data
 [PHsim,PHtv,VSsim] = calcPhaseHist(SPsim,T1,T2,NB,freq);
 [SACsim,SACtv,CIsim] = calcSAC(SPsim,BW,T1,T2,TL);
 
-% calculating spike counts and rate -- in vivo data
+%% calculating spike counts and rate -- in vivo data
 NspSim = sum(PHsim); % total number of spikes
 TallSim = M * (T2-T1); % [ms] total time length 
 rateSim = NspSim*1000/TallSim; % [spike/sec] mean rate
 
-% plotting data
+%% plotting data
 figure(1);
 set(gcf, 'PaperPositionMode', 'auto');
 set(gcf, 'Position', [50 100 560*1.0 420*1.5]);
@@ -92,7 +106,7 @@ text(0.1,max(PH)*0.4,sprintf('Nspikes = %.0f',NspSim));
 subplot(2,1,2); cla; hold on;
 plot(SACtv,SAC,'b-'); 
 plot(SACtv,SACsim,'r-'); 
-xlim([-31,31])
+xlim([-TL,TL])
 ylim([0, max(SAC)*1.3]);
 text(-5,max(SAC)*1.2,sprintf('CIemp = %.4f',CI));
 text(-5,max(SAC)*1.0,sprintf('CIsim = %.4f',CIsim));
